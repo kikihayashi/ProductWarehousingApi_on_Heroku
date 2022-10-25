@@ -6,7 +6,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 public class BarcodeItem {
-
     @NotEmpty
     @JsonProperty("Print_IP")
     private String printIp;

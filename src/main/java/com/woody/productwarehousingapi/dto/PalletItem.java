@@ -1,12 +1,12 @@
 package com.woody.productwarehousingapi.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
-public class PalletRequest {
-
+public class PalletItem {
     @NotBlank
     @JsonProperty("Print_IP")
     private String printIp;

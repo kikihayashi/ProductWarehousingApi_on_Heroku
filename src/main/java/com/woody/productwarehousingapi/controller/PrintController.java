@@ -2,8 +2,8 @@ package com.woody.productwarehousingapi.controller;
 
 import com.woody.productwarehousingapi.dto.BarcodeItem;
 import com.woody.productwarehousingapi.dto.InvalidPalletRequest;
-import com.woody.productwarehousingapi.dto.PalletRequest;
-import com.woody.productwarehousingapi.dto.ReprintPalletRequest;
+import com.woody.productwarehousingapi.dto.PalletItem;
+import com.woody.productwarehousingapi.dto.PalletItemWithNo;
 import com.woody.productwarehousingapi.model.PrintResponse;
 import com.woody.productwarehousingapi.service.PrintService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Validated
 @RestController
@@ -33,41 +30,13 @@ public class PrintController {
 
         if (id > 0) {
             BarcodeItem barcodeItemNew = printService.getBarcodeById(id);
-            printService.printBarcode(barcodeItemNew);
+            String printIp = barcodeItem.getPrintIp();
+            printService.printBarcode(printIp, barcodeItemNew);
             printResponse.setMessage("成功");
             printResponse.setQrcode(barcodeItemNew.getQrcode());
         } else {
             printResponse.setMessage("失敗");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(printResponse);
-    }
-
-    @PostMapping("/pallet/print")
-    public ResponseEntity<PrintResponse> printPallet(@RequestBody @Valid PalletRequest palletRequest) {
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("yy-MM-dd-HH-mm-ss");
-        String[] time = dateFormat.format(date).split("-");
-        String pallet = time[0]
-                + (char) (65 + (Integer.valueOf(time[1]) + Integer.valueOf(time[2])) % 26)
-                + (char) (65 + Math.round((Integer.valueOf(time[3]) + Integer.valueOf(time[4]) + Integer.valueOf(time[5])) * Math.random()) % 26)
-                + (Integer.valueOf(time[3]) + Integer.valueOf(time[4]))
-                + time[5];
-
-        PrintResponse printResponse = new PrintResponse();
-        printResponse.setMessage("成功");
-        printResponse.setQrcode(pallet);
-
-        return ResponseEntity.status(HttpStatus.OK).body(printResponse);
-    }
-
-    @PostMapping("/pallet/invalid")
-    public ResponseEntity<PrintResponse> invalidPallet(@RequestBody @Valid InvalidPalletRequest invalidPalletRequest) {
-        for (InvalidPalletRequest.SerialQuery s : invalidPalletRequest.getSerialQueryList()) {
-            System.out.println(s.getSerialId());
-        }
-        PrintResponse printResponse = new PrintResponse();
-        printResponse.setMessage("成功");
-
         return ResponseEntity.status(HttpStatus.OK).body(printResponse);
     }
 
@@ -78,7 +47,8 @@ public class PrintController {
         BarcodeItem barcodeItemNew = printService.getBarcodeByQrcode(barcodeItem.getQrcode());
 
         if (barcodeItemNew != null) {
-            printService.printBarcode(barcodeItemNew);
+            String printIp = barcodeItem.getPrintIp();
+            printService.printBarcode(printIp, barcodeItemNew);
             printResponse.setMessage("成功");
             printResponse.setQrcode(barcodeItemNew.getQrcode());
         } else {
@@ -87,11 +57,57 @@ public class PrintController {
         return ResponseEntity.status(HttpStatus.OK).body(printResponse);
     }
 
+    @PostMapping("/pallet/print")
+    public ResponseEntity<PrintResponse> printPallet(@RequestBody @Valid PalletItem palletItem) {
+        PrintResponse printResponse = new PrintResponse();
+
+        Integer id = printService.createPallet(palletItem);
+
+        if (id > 0) {
+            PalletItemWithNo palletItemWithNoNew = printService.getPalletById(id);
+            //列印棧板標籤
+            String printIp = palletItem.getPrintIp();
+            String pdaId = palletItem.getMachineId();
+            printService.printPallet(pdaId, printIp, palletItemWithNoNew);
+            printResponse.setMessage("成功");
+            printResponse.setQrcode(palletItemWithNoNew.getPalletNo());
+        } else {
+            printResponse.setMessage("失敗");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(printResponse);
+    }
+
     @PostMapping("/pallet/reprint")
-    public ResponseEntity<PrintResponse> reprintPallet(@RequestBody @Valid ReprintPalletRequest reprintPalletRequest) {
+    public ResponseEntity<PrintResponse> reprintPallet(@RequestBody @Valid PalletItemWithNo palletItemWithNo) {
+        PrintResponse printResponse = new PrintResponse();
+
+        PalletItemWithNo palletItemWithNoNew = printService.getPalletByNo(palletItemWithNo.getPalletNo());
+
+        if (palletItemWithNoNew != null) {
+            //列印棧板標籤
+            String printIp = palletItemWithNoNew.getPrintIp();
+            String pdaId = palletItemWithNoNew.getMachineId();
+            printService.printPallet(pdaId, printIp, palletItemWithNoNew);
+            printResponse.setMessage("成功");
+            printResponse.setQrcode(palletItemWithNoNew.getPalletNo());
+        } else {
+            printResponse.setMessage("失敗");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(printResponse);
+    }
+
+    @PostMapping("/pallet/invalid")
+    public ResponseEntity<PrintResponse> invalidPallet(@RequestBody @Valid InvalidPalletRequest invalidPalletRequest) {
+
+        printService.invalidBarcode(invalidPalletRequest.getSerialQueryList());
+
+
+        for (InvalidPalletRequest.SerialQuery s : invalidPalletRequest.getSerialQueryList()) {
+            System.out.println(s.getSerialId());
+        }
         PrintResponse printResponse = new PrintResponse();
         printResponse.setMessage("成功");
-        printResponse.setQrcode(reprintPalletRequest.getPalletId());
+
         return ResponseEntity.status(HttpStatus.OK).body(printResponse);
     }
 }
