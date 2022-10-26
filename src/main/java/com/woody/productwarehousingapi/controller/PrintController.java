@@ -30,12 +30,11 @@ public class PrintController {
 
         if (id > 0) {
             BarcodeItem barcodeItemNew = printService.getBarcodeById(id);
-            String printIp = barcodeItem.getPrintIp();
-            printService.printBarcode(printIp, barcodeItemNew);
+            printService.printBarcode(barcodeItem.getPrintIp(), barcodeItemNew);
             printResponse.setMessage("成功");
-            printResponse.setQrcode(barcodeItemNew.getQrcode());
+            printResponse.setQrcode(barcodeItem.getQrcode());
         } else {
-            printResponse.setMessage("失敗");
+            printResponse.setMessage("失敗，條碼:" + barcodeItem.getQrcode() + "已被使用");
         }
         return ResponseEntity.status(HttpStatus.OK).body(printResponse);
     }
@@ -44,17 +43,16 @@ public class PrintController {
     public ResponseEntity<PrintResponse> reprintBarcode(@RequestBody @Valid BarcodeItem barcodeItem) {
         PrintResponse printResponse = new PrintResponse();
 
-        BarcodeItem barcodeItemNew = printService.getBarcodeByQrcode(barcodeItem.getQrcode());
+        boolean isExist = printService.checkIfBarcodeExist(barcodeItem.getQrcode());
 
-        if (barcodeItemNew != null) {
-            String printIp = barcodeItem.getPrintIp();
-            printService.printBarcode(printIp, barcodeItemNew);
+        if (isExist) {
+            printService.printBarcode(barcodeItem.getPrintIp(), barcodeItem);
             printResponse.setMessage("成功");
-            printResponse.setQrcode(barcodeItemNew.getQrcode());
+            printResponse.setQrcode(barcodeItem.getQrcode());
         } else {
-            printResponse.setMessage("失敗");
+            printResponse.setMessage("失敗，條碼:" + barcodeItem.getQrcode() + "不存在！");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(printResponse);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(printResponse);
     }
 
     @PostMapping("/pallet/print")
@@ -65,14 +63,11 @@ public class PrintController {
 
         if (id > 0) {
             PalletItemWithNo palletItemWithNoNew = printService.getPalletById(id);
-            //列印棧板標籤
-            String printIp = palletItem.getPrintIp();
-            String pdaId = palletItem.getMachineId();
-            printService.printPallet(pdaId, printIp, palletItemWithNoNew);
+            printService.printPallet(palletItem.getMachineId(), palletItem.getPrintIp(), palletItemWithNoNew);
             printResponse.setMessage("成功");
             printResponse.setQrcode(palletItemWithNoNew.getPalletNo());
         } else {
-            printResponse.setMessage("失敗");
+            printResponse.setMessage("失敗，沒有符合條件的條碼可以綁定");
         }
         return ResponseEntity.status(HttpStatus.OK).body(printResponse);
     }
@@ -81,33 +76,26 @@ public class PrintController {
     public ResponseEntity<PrintResponse> reprintPallet(@RequestBody @Valid PalletItemWithNo palletItemWithNo) {
         PrintResponse printResponse = new PrintResponse();
 
-        PalletItemWithNo palletItemWithNoNew = printService.getPalletByNo(palletItemWithNo.getPalletNo());
+        boolean isExist = printService.checkIfPalletExist(palletItemWithNo.getPalletNo());
 
-        if (palletItemWithNoNew != null) {
-            //列印棧板標籤
-            String printIp = palletItemWithNoNew.getPrintIp();
-            String pdaId = palletItemWithNoNew.getMachineId();
-            printService.printPallet(pdaId, printIp, palletItemWithNoNew);
+        if (isExist) {
+            printService.printPallet(palletItemWithNo.getMachineId(), palletItemWithNo.getPrintIp(), palletItemWithNo);
             printResponse.setMessage("成功");
-            printResponse.setQrcode(palletItemWithNoNew.getPalletNo());
+            printResponse.setQrcode(palletItemWithNo.getPalletNo());
         } else {
-            printResponse.setMessage("失敗");
+            printResponse.setMessage("失敗，棧板號:" + palletItemWithNo.getPalletNo() + "不存在");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(printResponse);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(printResponse);
     }
 
     @PostMapping("/pallet/invalid")
     public ResponseEntity<PrintResponse> invalidPallet(@RequestBody @Valid InvalidPalletRequest invalidPalletRequest) {
+        PrintResponse printResponse = new PrintResponse();
 
         printService.invalidBarcode(invalidPalletRequest.getSerialQueryList());
 
-
-        for (InvalidPalletRequest.SerialQuery s : invalidPalletRequest.getSerialQueryList()) {
-            System.out.println(s.getSerialId());
-        }
-        PrintResponse printResponse = new PrintResponse();
         printResponse.setMessage("成功");
 
-        return ResponseEntity.status(HttpStatus.OK).body(printResponse);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(printResponse);
     }
 }

@@ -14,17 +14,16 @@ public interface PrintService {
 
     BarcodeItem getBarcodeById(Integer id);
 
-    BarcodeItem getBarcodeByQrcode(String qrCode);
-
     PalletItemWithNo getPalletById(Integer id);
 
-    PalletItemWithNo getPalletByNo(String palletNo);
+    boolean checkIfBarcodeExist(String qrCode);
+
+    boolean checkIfPalletExist(String palletNo);
 
     void invalidBarcode(List<InvalidPalletRequest.SerialQuery> serialQueryList);
 
     void printBarcode(String printIp, BarcodeItem barcodeItem);
 
     void printPallet(String pdaId, String printIp, PalletItemWithNo palletItemWithNo);
-
 
 }

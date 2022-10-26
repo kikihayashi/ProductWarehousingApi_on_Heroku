@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 public class UploadRequest {
-
     @NotBlank
     @JsonProperty("CID")
     private String companyId;
@@ -394,7 +393,7 @@ public class UploadRequest {
 
     public static class SerialNo {
 
-        @JsonProperty("SerialNo")
+        @JsonProperty("AllSerialNo")
         private List<AllSerialNo> allSerialNoList;
 
         public List<AllSerialNo> getAllSerialNoList() {

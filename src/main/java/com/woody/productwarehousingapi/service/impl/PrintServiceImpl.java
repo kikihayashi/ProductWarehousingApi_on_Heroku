@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,18 +26,44 @@ public class PrintServiceImpl implements PrintService {
     private PrintDao printDao;
 
     @Override
+    public boolean checkIfBarcodeExist(String qrCode) {
+        return printDao.checkIfBarcodeExist(qrCode);
+    }
+
+    @Override
+    public boolean checkIfPalletExist(String palletNo) {
+        return printDao.checkIfPalletExist(palletNo);
+    }
+
+    @Override
     public Integer createBarcode(BarcodeItem barcodeItem) {
         String qrCode = barcodeItem.getQrcode();
 
-        BarcodeItem barcodeItemCheck = printDao.getBarcodeByQrcode(qrCode);
-
-        if (barcodeItemCheck == null) {
-            return printDao.createBarcode(barcodeItem);
+        if (printDao.checkIfBarcodeExist(qrCode)) {
+            log.warn("條碼: {} 已存在，不可列印！", qrCode);
+            return -1;
         }
-        log.warn("Barcode {} 已存在，不可列印！", qrCode);
-        return -1;
+        return printDao.createBarcode(barcodeItem);
     }
 
+    @Transactional
+    @Override
+    public Integer createPallet(PalletItem palletItem) {
+        if (printDao.checkIfBarcodeCanCollect(palletItem)) {
+            //製作棧板號
+            String pallet = getPallet();
+            while (printDao.checkIfPalletExist(pallet)) {
+                pallet = getPallet();
+            }
+            //綁定條碼
+            printDao.collectBarcode(palletItem, pallet);
+            //新增棧板
+            return printDao.createPallet(palletItem, pallet);
+        } else {
+            log.warn("綁定棧板失敗，沒有符合條件的條碼可以綁定！");
+            return -1;
+        }
+    }
 
     @Override
     public BarcodeItem getBarcodeById(Integer id) {
@@ -44,57 +71,29 @@ public class PrintServiceImpl implements PrintService {
     }
 
     @Override
-    public BarcodeItem getBarcodeByQrcode(String qrCode) {
-        return printDao.getBarcodeByQrcode(qrCode);
-    }
-
-    @Override
-    public Integer createPallet(PalletItem palletItem) {
-        List<BarcodeItem> barcodeItemList = printDao.getBarcodeList(palletItem);
-        if (barcodeItemList.size() > 0) {
-            //製作棧板號
-            String pallet = getPallet();
-            while (printDao.checkIfPalletExist(pallet)) {
-                pallet = getPallet();
-            }
-            //綁定條碼
-            printDao.collectBarcode(pallet);
-            //新增棧板
-            return printDao.createPallet(palletItem, pallet);
-        }
-        log.warn("綁定棧板失敗！");
-        return -1;
-    }
-
-    @Override
     public PalletItemWithNo getPalletById(Integer id) {
         return printDao.getPalletById(id);
     }
 
-    @Override
-    public PalletItemWithNo getPalletByNo(String palletNo) {
-        return printDao.getPalletByNo(palletNo);
-    }
-
+    @Transactional
     @Override
     public void invalidBarcode(List<InvalidPalletRequest.SerialQuery> serialQueryList) {
-
         //作廢條碼
-//        printDao.invalidBarcode();
+        printDao.invalidBarcode(serialQueryList.get(0));
+        log.info("作廢棧板成功！");
     }
 
     @Override
     public void printBarcode(String printIp, BarcodeItem barcodeItem) {
         //列印Barcode
-        System.out.println("列印機(" + printIp + ")-列印條碼：" + barcodeItem.getQrcode());
+        log.info("列印機(" + printIp + ")-列印條碼：" + barcodeItem.getQrcode());
     }
 
     @Override
     public void printPallet(String pdaId, String printIp, PalletItemWithNo palletItem) {
         //列印Pallet
-        System.out.println("PDA號碼-" + pdaId + "/列印機(" + printIp + ")-列印棧板：" + palletItem.getPalletNo());
+        log.info("PDA號碼-" + pdaId + "/列印機(" + printIp + ")-列印棧板：" + palletItem.getPalletNo());
     }
-
 
     private String getPallet() {
         Date date = new Date();

@@ -26,15 +26,17 @@ public class UploadController {
 
     @PostMapping("/upload")
     public ResponseEntity<?> upload(@RequestBody @Valid UploadRequest uploadRequest) {
-
+        UploadResponse uploadResponse = new UploadResponse();
         UploadResponse.Result result = new UploadResponse.Result();
+        String warehouseNo = uploadService.storeProduct(uploadRequest);
+
         result.setErrMessage("");
         result.setIfSucceed("True");
-        result.setWorkId(String.valueOf(new Date().getTime()));
-        UploadResponse uploadResponse = new UploadResponse();
+        result.setWorkId(warehouseNo);
+
         uploadResponse.setResult(result);
 
-        return ResponseEntity.status(HttpStatus.OK).body(uploadResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(uploadResponse);
     }
 
     @PostMapping("/uploadDB")

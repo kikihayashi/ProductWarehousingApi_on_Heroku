@@ -1,7 +1,10 @@
 package com.woody.productwarehousingapi.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+//若回傳參數有Null則忽略該參數(不轉成json)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UploadResponse {
 
     @JsonProperty("Result")
