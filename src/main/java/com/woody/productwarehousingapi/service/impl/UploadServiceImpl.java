@@ -37,7 +37,12 @@ public class UploadServiceImpl implements UploadService {
     @Transactional
     @Override
     public String storeProduct(UploadRequest uploadRequest) {
-        return uploadDao.storeProduct(uploadRequest);
+
+        String warehouseNo = uploadDao.storeProduct(uploadRequest);
+
+        Integer warehouseId = uploadDao.createWarehouse(warehouseNo, uploadRequest);
+
+        return warehouseNo;
     }
 
     @Override
