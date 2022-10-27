@@ -1,9 +1,12 @@
 package com.woody.productwarehousingapi.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+//若回傳參數有Null則忽略該參數(不轉成json)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class InfoResponse {
 
     @JsonProperty("Message")

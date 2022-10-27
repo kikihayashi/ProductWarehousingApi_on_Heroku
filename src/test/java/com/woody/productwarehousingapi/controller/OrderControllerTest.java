@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -69,6 +69,36 @@ public class OrderControllerTest {
     }
 
     @Test
+    public void getOrder_notExistOrder() throws Exception {
+        OrderRequest orderRequest = new OrderRequest();
+        orderRequest.setCompanyId("99");
+        orderRequest.setUserId("administrator");
+        orderRequest.setUserPassword("chi");
+        orderRequest.setTag("Order_Query");
+
+        OrderRequest.Data data = new OrderRequest.Data();
+        OrderRequest.MasterData masterData = new OrderRequest.MasterData();
+        masterData.setOrderNo("99999999999");
+        List<OrderRequest.MasterData> list = new ArrayList<>();
+        list.add(masterData);
+        data.setMasterDataList(list);
+        orderRequest.setData(data);
+
+        String json = objectMapper.writeValueAsString(orderRequest);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/order")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.result[0].IfSucceed", equalTo("False")))
+                .andExpect(jsonPath("$.result[0].ErrMessage", equalTo("無此製令單")))
+                .andExpect(jsonPath("$.result[0].IfBiz", equalTo("False")));
+    }
+
+    @Test
     public void getInfo_success() throws Exception {
 
         List<InfoRequest.Query> list = new ArrayList<>();
@@ -96,5 +126,29 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.Data.Query1[0].QJUppLimitWt", equalTo("0")))
                 .andExpect(jsonPath("$.Data.Query1[0].QJLowLimitWt", equalTo("0")))
                 .andExpect(jsonPath("$.Data.Query1[0].DefValidDays", equalTo("365")));
+    }
+
+    @Test
+    public void getInfo_notExistProductId() throws Exception {
+
+        List<InfoRequest.Query> list = new ArrayList<>();
+        InfoRequest.Query query = new InfoRequest.Query();
+        query.setProductId("XXX-99");
+        list.add(query);
+
+        InfoRequest infoRequest = new InfoRequest();
+        infoRequest.setCompany("99");
+        infoRequest.setQueryList(list);
+
+        String json = objectMapper.writeValueAsString(infoRequest);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/info")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.Message", equalTo("失敗")));
     }
 }

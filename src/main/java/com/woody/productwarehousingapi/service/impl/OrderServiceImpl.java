@@ -70,6 +70,10 @@ public class OrderServiceImpl implements OrderService {
         for (InfoRequest.Query q : productIdList) {
             String productId = q.getProductId();
             InfoItem infoItem = orderDao.getInfoByProductId(productId);
+            if (infoItem == null) {
+                infoResponse.setMessage("失敗");
+                return infoResponse;
+            }
             infoList.add(infoItem);
         }
 
