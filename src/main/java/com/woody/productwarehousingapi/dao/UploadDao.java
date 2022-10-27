@@ -5,5 +5,5 @@ import com.woody.productwarehousingapi.dto.UploadRequest;
 public interface UploadDao {
     String storeProduct(UploadRequest uploadRequest);
 
-    Integer createWarehouse(String warehouseNo, UploadRequest uploadRequest);
+    void createWarehouse(String warehouseNo, UploadRequest uploadRequest);
 }

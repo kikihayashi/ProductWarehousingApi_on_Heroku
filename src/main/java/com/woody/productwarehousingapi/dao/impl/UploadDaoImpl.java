@@ -69,7 +69,7 @@ public class UploadDaoImpl implements UploadDao {
     }
 
     @Override
-    public Integer createWarehouse(String warehouseNo, UploadRequest uploadRequest) {
+    public void createWarehouse(String warehouseNo, UploadRequest uploadRequest) {
         String sqlCommand = "INSERT INTO warehouse_list (warehouse_no, bill_date, order_no, order_date, work_time, " +
                 "product_id, product_name, total_quantity, created_date, last_modified_date) " +
                 "VALUES(:warehouseNo, :billDate, :orderNo, :orderDate, :workTime, :productId, :productName, :totalQuantity, :createdDate, :lastModifiedDate)";
@@ -90,13 +90,7 @@ public class UploadDaoImpl implements UploadDao {
         map.put("createdDate", now);
         map.put("lastModifiedDate", now);
 
-        KeyHolder keyholder = new GeneratedKeyHolder();
-
-        namedParameterJdbcTemplate.update(sqlCommand, new MapSqlParameterSource(map), keyholder);
-
-        int warehouseId = keyholder.getKey().intValue();
-
-        return warehouseId;
+        namedParameterJdbcTemplate.update(sqlCommand, new MapSqlParameterSource(map));
     }
 
 //    @Override

@@ -40,7 +40,7 @@ public class UploadServiceImpl implements UploadService {
 
         String warehouseNo = uploadDao.storeProduct(uploadRequest);
 
-        Integer warehouseId = uploadDao.createWarehouse(warehouseNo, uploadRequest);
+        uploadDao.createWarehouse(warehouseNo, uploadRequest);
 
         return warehouseNo;
     }
