@@ -1,4 +1,4 @@
-CREATE TABLE order_list
+CREATE TABLE IF NOT EXISTS order_list
 (
     order_id           SERIAL       NOT NULL PRIMARY KEY,
     bill_status        INT          NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE order_list
     last_modified_date TIMESTAMP    NOT NULL
 );
 
-CREATE TABLE info_list
+CREATE TABLE IF NOT EXISTS info_list
 (
     info_id            SERIAL       NOT NULL PRIMARY KEY,
     order_no           VARCHAR(32)  NOT NULL,
@@ -27,8 +27,7 @@ CREATE TABLE info_list
     last_modified_date TIMESTAMP    NOT NULL
 );
 
-
-CREATE TABLE barcode_list
+CREATE TABLE IF NOT EXISTS barcode_list
 (
     barcode_id         SERIAL       NOT NULL PRIMARY KEY,
     order_no           VARCHAR(32)  NOT NULL,
@@ -47,7 +46,7 @@ CREATE TABLE barcode_list
     last_modified_date TIMESTAMP    NOT NULL
 );
 
-CREATE TABLE pallet_list
+CREATE TABLE IF NOT EXISTS pallet_list
 (
     pallet_id          SERIAL       NOT NULL PRIMARY KEY,
     pallet_no          VARCHAR(32) NOT NULL,
@@ -57,7 +56,7 @@ CREATE TABLE pallet_list
     last_modified_date TIMESTAMP   NOT NULL
 );
 
-CREATE TABLE serial_list
+CREATE TABLE IF NOT EXISTS serial_list
 (
     serial_id          SERIAL       NOT NULL PRIMARY KEY,
     warehouse_no       VARCHAR(32)  NOT NULL,
@@ -78,7 +77,7 @@ CREATE TABLE serial_list
     last_modified_date TIMESTAMP    NOT NULL
 );
 
-CREATE TABLE warehouse_list
+CREATE TABLE IF NOT EXISTS warehouse_list
 (
     warehouse_id       SERIAL       NOT NULL PRIMARY KEY,
     warehouse_no       VARCHAR(32)  NOT NULL,
