@@ -102,7 +102,7 @@ public class PrintDaoImpl implements PrintDao {
 
         KeyHolder keyholder = new GeneratedKeyHolder();
 
-        namedParameterJdbcTemplate.update(sqlCommand, new MapSqlParameterSource(map), keyholder);
+        namedParameterJdbcTemplate.update(sqlCommand, new MapSqlParameterSource(map), keyholder, new String[]{"barcode_id"});
 
         int barcodeId = keyholder.getKey().intValue();
 
@@ -125,7 +125,7 @@ public class PrintDaoImpl implements PrintDao {
 
         KeyHolder keyholder = new GeneratedKeyHolder();
 
-        namedParameterJdbcTemplate.update(sqlCommand, new MapSqlParameterSource(map), keyholder);
+        namedParameterJdbcTemplate.update(sqlCommand, new MapSqlParameterSource(map), keyholder, new String[]{"pallet_id"});
 
         int palletId = keyholder.getKey().intValue();
 

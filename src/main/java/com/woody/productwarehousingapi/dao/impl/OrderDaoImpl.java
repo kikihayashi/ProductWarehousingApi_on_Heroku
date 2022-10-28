@@ -3,7 +3,6 @@ package com.woody.productwarehousingapi.dao.impl;
 import com.woody.productwarehousingapi.dao.OrderDao;
 import com.woody.productwarehousingapi.dto.InfoItem;
 import com.woody.productwarehousingapi.dto.OrderItem;
-import com.woody.productwarehousingapi.model.InfoResponse;
 import com.woody.productwarehousingapi.rowmapper.InfoItemRowMapper;
 import com.woody.productwarehousingapi.rowmapper.OrderItemRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
