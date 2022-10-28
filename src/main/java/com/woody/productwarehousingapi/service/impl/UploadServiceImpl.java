@@ -62,6 +62,4 @@ public class UploadServiceImpl implements UploadService {
             log.error("Failed to store file " + file.getOriginalFilename() + "\n" + e);
         }
     }
-
-
 }
