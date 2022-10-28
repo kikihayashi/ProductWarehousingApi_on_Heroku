@@ -39,7 +39,7 @@ public class UploadController {
 
     @PostMapping("/uploadDB")
     public ResponseEntity<?> uploadDatabase(@RequestParam("file") MultipartFile file) {
-        uploadService.store(file);
+//        uploadService.store(file);
         UploadResponse uploadResponse = new UploadResponse();
         uploadResponse.setSuccess("true");
         return ResponseEntity.status(HttpStatus.OK).body(uploadResponse);
