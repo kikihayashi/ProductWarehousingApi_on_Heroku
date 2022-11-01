@@ -18,6 +18,9 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Component
 public class UploadServiceImpl implements UploadService {
@@ -43,6 +46,21 @@ public class UploadServiceImpl implements UploadService {
         uploadDao.createWarehouse(warehouseNo, uploadRequest);
 
         return warehouseNo;
+    }
+
+    @Override
+    public boolean checkIfPalletUploaded(List<UploadRequest.AllSerialNo> allSerialNoList) {
+        Set<String> palletSet = new HashSet<>();
+        for (UploadRequest.AllSerialNo serialNo : allSerialNoList) {
+            palletSet.add(serialNo.getPalletNo());
+        }
+
+        for (String pallet : palletSet) {
+            if (uploadDao.checkIfPalletUploaded(pallet)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

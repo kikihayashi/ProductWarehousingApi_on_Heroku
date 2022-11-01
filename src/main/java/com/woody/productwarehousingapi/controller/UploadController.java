@@ -26,12 +26,18 @@ public class UploadController {
     public ResponseEntity<?> upload(@RequestBody @Valid UploadRequest uploadRequest) {
         UploadResponse uploadResponse = new UploadResponse();
         UploadResponse.Result result = new UploadResponse.Result();
-        String warehouseNo = uploadService.storeProduct(uploadRequest);
 
-        result.setErrMessage("");
-        result.setIfSucceed("True");
-        result.setWorkId(warehouseNo);
+        boolean isUploaded = uploadService.checkIfPalletUploaded(uploadRequest.getSerialNo().getAllSerialNoList());
 
+        if (isUploaded) {
+            result.setErrMessage("錯誤，棧板號已上傳過");
+            result.setIfSucceed("False");
+        } else {
+            String warehouseNo = uploadService.storeProduct(uploadRequest);
+            result.setErrMessage("");
+            result.setIfSucceed("True");
+            result.setWorkId(warehouseNo);
+        }
         uploadResponse.setResult(result);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(uploadResponse);
