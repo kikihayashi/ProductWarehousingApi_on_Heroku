@@ -111,8 +111,8 @@ public class PrintDaoImpl implements PrintDao {
 
     @Override
     public Integer createPallet(PalletItem palletItem, String pallet) {
-        String sqlCommand = "INSERT INTO pallet_list (pallet_no, weight_set, make_date, created_date, last_modified_date) " +
-                "VALUES(:palletNo, :weightSet, :makeDate, :createdDate, :lastModifiedDate)";
+        String sqlCommand = "INSERT INTO pallet_list (pallet_no, weight_set, make_date, upload_status, created_date, last_modified_date) " +
+                "VALUES(:palletNo, :weightSet, :makeDate, :uploadStatus, :createdDate, :lastModifiedDate)";
 
         Date now = new Date();
 
@@ -120,12 +120,13 @@ public class PrintDaoImpl implements PrintDao {
         map.put("palletNo", pallet);
         map.put("weightSet", palletItem.getWeightSet());
         map.put("makeDate", palletItem.getMakeDate());
+        map.put("uploadStatus", "N");
         map.put("createdDate", now);
         map.put("lastModifiedDate", now);
 
         KeyHolder keyholder = new GeneratedKeyHolder();
 
-        namedParameterJdbcTemplate.update(sqlCommand, new MapSqlParameterSource(map), keyholder, new String[]{"pallet_id"});
+        namedParameterJdbcTemplate.update(sqlCommand, new MapSqlParameterSource(map), keyholder);
 
         int palletId = keyholder.getKey().intValue();
 
