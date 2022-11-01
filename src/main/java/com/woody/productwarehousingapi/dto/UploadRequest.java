@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.util.List;
 
 public class UploadRequest {
@@ -270,124 +269,124 @@ public class UploadRequest {
 
     public static class DetailDataSub {
         @JsonProperty("ParentRowNO")
-        private String ParentRowNO;
+        private String parentRowNO;
         @JsonProperty("BatchID")
-        private String BatchID;
+        private String batchID;
         @JsonProperty("Quantity")
-        private String Quantity;
+        private String quantity;
         @JsonProperty("ProduceDate")
-        private String ProduceDate;
+        private String produceDate;
         @JsonProperty("ValidDate")
-        private String ValidDate;
+        private String validDate;
         @JsonProperty("EstWareInDate")
-        private String EstWareInDate;
+        private Integer estWareInDate;
         @JsonProperty("StorageID")
-        private String StorageID;
+        private String storageID;
         @JsonProperty("Serial")
-        private String Serial;
+        private String serial;
         @JsonProperty("QJSetWeight")
-        private String QJSetWeight;
+        private String qjSetWeight;
         @JsonProperty("Memo")
-        private String Memo;
+        private String memo;
         @JsonProperty("IsBox")
-        private String IsBox;
+        private String isBox;
         @JsonProperty("Created_at")
-        private String Created_at;
+        private String created_at;
 
         public String getParentRowNO() {
-            return ParentRowNO;
+            return parentRowNO;
         }
 
         public void setParentRowNO(String parentRowNO) {
-            ParentRowNO = parentRowNO;
+            this.parentRowNO = parentRowNO;
         }
 
         public String getBatchID() {
-            return BatchID;
+            return batchID;
         }
 
         public void setBatchID(String batchID) {
-            BatchID = batchID;
+            this.batchID = batchID;
         }
 
         public String getQuantity() {
-            return Quantity;
+            return quantity;
         }
 
         public void setQuantity(String quantity) {
-            Quantity = quantity;
+            this.quantity = quantity;
         }
 
         public String getProduceDate() {
-            return ProduceDate;
+            return produceDate;
         }
 
         public void setProduceDate(String produceDate) {
-            ProduceDate = produceDate;
+            this.produceDate = produceDate;
         }
 
         public String getValidDate() {
-            return ValidDate;
+            return validDate;
         }
 
         public void setValidDate(String validDate) {
-            ValidDate = validDate;
+            this.validDate = validDate;
         }
 
-        public String getEstWareInDate() {
-            return EstWareInDate;
+        public Integer getEstWareInDate() {
+            return estWareInDate;
         }
 
-        public void setEstWareInDate(String estWareInDate) {
-            EstWareInDate = estWareInDate;
+        public void setEstWareInDate(Integer estWareInDate) {
+            this.estWareInDate = estWareInDate;
         }
 
         public String getStorageID() {
-            return StorageID;
+            return storageID;
         }
 
         public void setStorageID(String storageID) {
-            StorageID = storageID;
+            this.storageID = storageID;
         }
 
         public String getSerial() {
-            return Serial;
+            return serial;
         }
 
         public void setSerial(String serial) {
-            Serial = serial;
+            this.serial = serial;
         }
 
-        public String getQJSetWeight() {
-            return QJSetWeight;
+        public String getQjSetWeight() {
+            return qjSetWeight;
         }
 
-        public void setQJSetWeight(String QJSetWeight) {
-            this.QJSetWeight = QJSetWeight;
+        public void setQjSetWeight(String qjSetWeight) {
+            this.qjSetWeight = qjSetWeight;
         }
 
         public String getMemo() {
-            return Memo;
+            return memo;
         }
 
         public void setMemo(String memo) {
-            Memo = memo;
+            this.memo = memo;
         }
 
         public String getIsBox() {
-            return IsBox;
+            return isBox;
         }
 
         public void setIsBox(String isBox) {
-            IsBox = isBox;
+            this.isBox = isBox;
         }
 
         public String getCreated_at() {
-            return Created_at;
+            return created_at;
         }
 
         public void setCreated_at(String created_at) {
-            Created_at = created_at;
+            this.created_at = created_at;
         }
     }
 
