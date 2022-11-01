@@ -29,6 +29,7 @@ public class UploadResponse {
         this.success = success;
     }
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Result {
         @JsonProperty("IfSucceed")
         private String ifSucceed;
