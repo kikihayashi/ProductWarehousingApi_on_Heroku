@@ -18,6 +18,9 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Component
 public class UploadServiceImpl implements UploadService {
@@ -25,6 +28,8 @@ public class UploadServiceImpl implements UploadService {
     private static final Logger log = LoggerFactory.getLogger(UploadServiceImpl.class);
 
     private final Path rootLocation;
+
+    private Set<String> palletSet;
 
     @Autowired
     private UploadDao uploadDao;
@@ -42,11 +47,27 @@ public class UploadServiceImpl implements UploadService {
 
         uploadDao.createWarehouse(warehouseNo, uploadRequest);
 
+        uploadDao.changePalletUploadStatus(palletSet);
+
         return warehouseNo;
     }
 
     @Override
-    public void store(MultipartFile file) {
+    public String getUploadedPallet(List<UploadRequest.AllSerialNo> allSerialNoList) {
+        palletSet = new HashSet<>();
+        for (UploadRequest.AllSerialNo serialNo : allSerialNoList) {
+            palletSet.add(serialNo.getPalletNo());
+        }
+        for (String pallet : palletSet) {
+            if (uploadDao.checkIfPalletUploaded(pallet)) {
+                return pallet;
+            }
+        }
+        return "";
+    }
+
+    @Override
+    public void storeFile(MultipartFile file) {
         try {
             if (!Files.isDirectory(rootLocation)) {
                 Files.createDirectory(rootLocation);
