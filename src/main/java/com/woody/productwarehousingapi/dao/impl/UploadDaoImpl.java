@@ -5,8 +5,6 @@ import com.woody.productwarehousingapi.dto.UploadRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -54,7 +52,7 @@ public class UploadDaoImpl implements UploadDao {
             parameterSources[i].addValue("palletNo", item.getPalletNo());
             parameterSources[i].addValue("validDate", detailDataSub.getValidDate());
             parameterSources[i].addValue("estDate", detailDataSub.getEstWareInDate());
-            parameterSources[i].addValue("qjSetWeight", detailDataSub.getQJSetWeight());
+            parameterSources[i].addValue("qjSetWeight", detailDataSub.getQjSetWeight());
             parameterSources[i].addValue("pdaId", item.getPdaId());
             parameterSources[i].addValue("wareInClass", detailData.getWareInClass());
             parameterSources[i].addValue("wareId", detailData.getWareID());
