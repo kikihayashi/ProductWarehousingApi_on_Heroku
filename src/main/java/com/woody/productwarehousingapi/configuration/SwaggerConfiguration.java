@@ -34,13 +34,13 @@ public class SwaggerConfiguration {
 
     private ApiInfo apiInfo() {
         return new ApiInfo(
-                "Spring Boot Mall Swagger",
-                "Swagger Api 測試",
+                "Spring Boot ProductWarehousingApi",
+                "Swagger Api",
                 "v1.0",
                 "",
-                new Contact("聯絡我", "",
-                        "test@gmail.com"),
-                "參考網站", "https://ithelp.ithome.com.tw/articles/10247180",
+                new Contact("", "",
+                        ""),
+                "", "",
                 Collections.emptyList());
     }
 }
