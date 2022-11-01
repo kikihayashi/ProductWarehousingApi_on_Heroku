@@ -22,7 +22,7 @@ public class UploadDaoImpl implements UploadDao {
     public String storeProduct(UploadRequest uploadRequest) {
         String sqlCommand = "INSERT INTO serial_list (warehouse_no, order_no, prod_id, prod_name, batch_id, serial_no, pallet_no, " +
                 "valid_date, est_date, qj_set_weight, pda_id, ware_in_class, ware_id, storage_id, created_date, last_modified_date) " +
-                "VALUE(:warehouseNo, :orderNo, :prodId, :prodName, :batchId, :serialNo, :palletNo, :validDate, :estDate, :qjSetWeight, " +
+                "VALUES(:warehouseNo, :orderNo, :prodId, :prodName, :batchId, :serialNo, :palletNo, :validDate, :estDate, :qjSetWeight, " +
                 ":pdaId, :wareInClass, :wareId, :storageId, :createdDate, :lastModifiedDate)";
 
         List<UploadRequest.AllSerialNo> serialNoList = uploadRequest.getSerialNo().getAllSerialNoList();
