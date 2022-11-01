@@ -27,16 +27,16 @@ public class UploadController {
         UploadResponse uploadResponse = new UploadResponse();
         UploadResponse.Result result = new UploadResponse.Result();
 
-        boolean isUploaded = uploadService.checkIfPalletUploaded(uploadRequest.getSerialNo().getAllSerialNoList());
+        String uploadedPallet = uploadService.getUploadedPallet(uploadRequest.getSerialNo().getAllSerialNoList());
 
-        if (isUploaded) {
-            result.setErrMessage("錯誤，棧板號已上傳過");
-            result.setIfSucceed("False");
-        } else {
+        if (uploadedPallet.isEmpty()) {
             String warehouseNo = uploadService.storeProduct(uploadRequest);
             result.setErrMessage("");
             result.setIfSucceed("True");
             result.setWorkId(warehouseNo);
+        } else {
+            result.setErrMessage("錯誤，棧板號：" + uploadedPallet + "已上傳過！");
+            result.setIfSucceed("False");
         }
         uploadResponse.setResult(result);
 
@@ -45,7 +45,7 @@ public class UploadController {
 
     @PostMapping("/uploadDB")
     public ResponseEntity<?> uploadDatabase(@RequestParam("file") MultipartFile file) {
-//        uploadService.store(file);
+//        uploadService.storeFile(file);
         UploadResponse uploadResponse = new UploadResponse();
         uploadResponse.setSuccess("true");
         return ResponseEntity.status(HttpStatus.OK).body(uploadResponse);

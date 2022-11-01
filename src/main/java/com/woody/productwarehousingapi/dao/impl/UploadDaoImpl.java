@@ -7,10 +7,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class UploadDaoImpl implements UploadDao {
@@ -93,6 +90,30 @@ public class UploadDaoImpl implements UploadDao {
 
     @Override
     public boolean checkIfPalletUploaded(String pallet) {
-        return false;
+        String sqlCommand = "SELECT COUNT(1) FROM pallet_list WHERE pallet_no = :pallet AND upload_status = :uploadStatus";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("pallet", pallet);
+        map.put("uploadStatus", "Y");
+
+        Integer count = namedParameterJdbcTemplate.queryForObject(sqlCommand, map, Integer.class);
+
+        return count > 0;
+    }
+
+    @Override
+    public void changePalletUploadStatus(Set<String> palletSet) {
+        String sqlCommand = "UPDATE pallet_list SET upload_status = :uploadStatus WHERE pallet_no = :palletNo";
+
+        MapSqlParameterSource[] parameterSources = new MapSqlParameterSource[palletSet.size()];
+        int i = 0;
+        for (String pallet : palletSet) {
+            parameterSources[i] = new MapSqlParameterSource();
+            parameterSources[i].addValue("uploadStatus", "Y");
+            parameterSources[i].addValue("palletNo", pallet);
+            i++;
+        }
+        //一次執行大量SQL語法
+        namedParameterJdbcTemplate.batchUpdate(sqlCommand, parameterSources);
     }
 }

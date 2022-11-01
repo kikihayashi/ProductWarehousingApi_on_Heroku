@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface UploadService {
 
-    void store(MultipartFile file);
+    void storeFile(MultipartFile file);
 
     String storeProduct(UploadRequest uploadRequest);
 
-    boolean checkIfPalletUploaded(List<UploadRequest.AllSerialNo> allSerialNoList);
+    String getUploadedPallet(List<UploadRequest.AllSerialNo> allSerialNoList);
 }

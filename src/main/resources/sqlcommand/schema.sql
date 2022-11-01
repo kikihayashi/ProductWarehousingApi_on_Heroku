@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS pallet_list
     pallet_no          VARCHAR(32) NOT NULL,
     weight_set         VARCHAR(32) NOT NULL,
     make_date          VARCHAR(32) NOT NULL,
+    upload_status      VARCHAR(32) NOT NULL,
     created_date       TIMESTAMP   NOT NULL,
     last_modified_date TIMESTAMP   NOT NULL
 );

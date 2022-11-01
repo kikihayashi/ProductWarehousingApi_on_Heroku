@@ -29,6 +29,8 @@ public class UploadServiceImpl implements UploadService {
 
     private final Path rootLocation;
 
+    private Set<String> palletSet;
+
     @Autowired
     private UploadDao uploadDao;
 
@@ -45,26 +47,27 @@ public class UploadServiceImpl implements UploadService {
 
         uploadDao.createWarehouse(warehouseNo, uploadRequest);
 
+        uploadDao.changePalletUploadStatus(palletSet);
+
         return warehouseNo;
     }
 
     @Override
-    public boolean checkIfPalletUploaded(List<UploadRequest.AllSerialNo> allSerialNoList) {
-        Set<String> palletSet = new HashSet<>();
+    public String getUploadedPallet(List<UploadRequest.AllSerialNo> allSerialNoList) {
+        palletSet = new HashSet<>();
         for (UploadRequest.AllSerialNo serialNo : allSerialNoList) {
             palletSet.add(serialNo.getPalletNo());
         }
-
         for (String pallet : palletSet) {
             if (uploadDao.checkIfPalletUploaded(pallet)) {
-                return true;
+                return pallet;
             }
         }
-        return false;
+        return "";
     }
 
     @Override
-    public void store(MultipartFile file) {
+    public void storeFile(MultipartFile file) {
         try {
             if (!Files.isDirectory(rootLocation)) {
                 Files.createDirectory(rootLocation);
