@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS order_list
 (
-    order_id           INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    order_id           INT          NOT NULL UNIQUE KEY AUTO_INCREMENT,
     bill_status        INT          NOT NULL,
     order_no           VARCHAR(32)  NOT NULL,
     order_date         INT          NOT NULL,
@@ -9,12 +9,13 @@ CREATE TABLE IF NOT EXISTS order_list
     src_qty            VARCHAR(32)  NOT NULL,
     est_date           INT          NOT NULL,
     created_date       TIMESTAMP    NOT NULL,
-    last_modified_date TIMESTAMP    NOT NULL
-);
+    last_modified_date TIMESTAMP    NOT NULL,
+    PRIMARY KEY(order_no, product_id)
+    );
 
 CREATE TABLE IF NOT EXISTS info_list
 (
-    info_id            INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    info_id            INT          NOT NULL UNIQUE KEY AUTO_INCREMENT,
     order_no           VARCHAR(32)  NOT NULL,
     row_no             INT          NOT NULL,
     nct_product_id     VARCHAR(128) NOT NULL,
@@ -24,12 +25,14 @@ CREATE TABLE IF NOT EXISTS info_list
     qj_low_weight      VARCHAR(32)  NOT NULL,
     def_valid_day      VARCHAR(32)  NOT NULL,
     created_date       TIMESTAMP    NOT NULL,
-    last_modified_date TIMESTAMP    NOT NULL
-);
+    last_modified_date TIMESTAMP    NOT NULL,
+    PRIMARY KEY(order_no, row_no, nct_product_id)
+    );
 
+-- 註：H2資料庫裡的UNIQUE等於MySQL裡的UNIQUE KEY
 CREATE TABLE IF NOT EXISTS barcode_list
 (
-    barcode_id         INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    barcode_id         INT          NOT NULL UNIQUE KEY AUTO_INCREMENT,
     order_no           VARCHAR(32)  NOT NULL,
     product_id         VARCHAR(32)  NOT NULL,
     product_name       VARCHAR(128) NOT NULL,
@@ -43,23 +46,26 @@ CREATE TABLE IF NOT EXISTS barcode_list
     pallet_no          VARCHAR(32)  NOT NULL,
     pallet_status      VARCHAR(32)  NOT NULL,
     created_date       TIMESTAMP    NOT NULL,
-    last_modified_date TIMESTAMP    NOT NULL
-);
+    last_modified_date TIMESTAMP    NOT NULL,
+    PRIMARY KEY(order_no, product_id, lot_no, serial_no, pallet_no)
+    );
+
 
 CREATE TABLE IF NOT EXISTS pallet_list
 (
-    pallet_id          INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    pallet_id          INT         NOT NULL UNIQUE KEY AUTO_INCREMENT,
     pallet_no          VARCHAR(32) NOT NULL,
     weight_set         VARCHAR(32) NOT NULL,
     make_date          VARCHAR(32) NOT NULL,
     upload_status      VARCHAR(32) NOT NULL,
     created_date       TIMESTAMP   NOT NULL,
-    last_modified_date TIMESTAMP   NOT NULL
-);
+    last_modified_date TIMESTAMP   NOT NULL,
+    PRIMARY KEY(pallet_no)
+    );
 
 CREATE TABLE IF NOT EXISTS serial_list
 (
-    serial_id          INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    serial_id          INT          NOT NULL UNIQUE KEY AUTO_INCREMENT,
     warehouse_no       VARCHAR(32)  NOT NULL,
     order_no           VARCHAR(32)  NOT NULL,
     prod_id            VARCHAR(32)  NOT NULL,
@@ -75,12 +81,13 @@ CREATE TABLE IF NOT EXISTS serial_list
     ware_id            VARCHAR(32)  NOT NULL,
     storage_id         VARCHAR(32)  NOT NULL,
     created_date       TIMESTAMP    NOT NULL,
-    last_modified_date TIMESTAMP    NOT NULL
-);
+    last_modified_date TIMESTAMP    NOT NULL,
+    PRIMARY KEY(warehouse_no, order_no, prod_id, batch_id, serial_no, pallet_no, pda_id, ware_in_class, ware_id, storage_id)
+    );
 
 CREATE TABLE IF NOT EXISTS warehouse_list
 (
-    warehouse_id       INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    warehouse_id       INT          NOT NULL UNIQUE KEY AUTO_INCREMENT,
     warehouse_no       VARCHAR(32)  NOT NULL,
     bill_date          VARCHAR(32)  NOT NULL,
     order_no           VARCHAR(32)  NOT NULL,
@@ -90,6 +97,6 @@ CREATE TABLE IF NOT EXISTS warehouse_list
     product_name       VARCHAR(128) NOT NULL,
     total_quantity     VARCHAR(32)  NOT NULL,
     created_date       TIMESTAMP    NOT NULL,
-    last_modified_date TIMESTAMP    NOT NULL
-);
-
+    last_modified_date TIMESTAMP    NOT NULL,
+    PRIMARY KEY(warehouse_no)
+    );
