@@ -3,25 +3,27 @@ package com.woody.productwarehousingapi.controller;
 import com.woody.productwarehousingapi.dto.UploadRequest;
 import com.woody.productwarehousingapi.model.UploadResponse;
 import com.woody.productwarehousingapi.service.UploadService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
 @RestController
 @Validated
+@Api(tags = "上傳功能")
+//@RequestMapping(path = "/root客製")
 public class UploadController {
 
     @Autowired
     private UploadService uploadService;
 
+    @ApiOperation("上傳入庫資訊")
     @PostMapping("/upload")
     public ResponseEntity<?> upload(@RequestBody @Valid UploadRequest uploadRequest) {
         UploadResponse uploadResponse = new UploadResponse();
@@ -43,6 +45,7 @@ public class UploadController {
         return ResponseEntity.status(HttpStatus.CREATED).body(uploadResponse);
     }
 
+    @ApiOperation("上傳資料庫")
     @PostMapping("/uploadDB")
     public ResponseEntity<?> uploadDatabase(@RequestParam("file") MultipartFile file) {
         uploadService.storeFile(file);

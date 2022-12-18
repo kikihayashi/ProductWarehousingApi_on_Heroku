@@ -6,22 +6,28 @@ import com.woody.productwarehousingapi.dto.PalletItem;
 import com.woody.productwarehousingapi.dto.PalletItemWithNo;
 import com.woody.productwarehousingapi.model.PrintResponse;
 import com.woody.productwarehousingapi.service.PrintService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
 @Validated
 @RestController
+@Api(tags = "列印功能")
+//@RequestMapping(path = "/root客製")
 public class PrintController {
     @Autowired
     private PrintService printService;
 
+    @ApiOperation("條碼列印")
     @PostMapping("/barcode/print")
     public ResponseEntity<PrintResponse> printBarcode(@RequestBody @Valid BarcodeItem barcodeItem) {
         PrintResponse printResponse = new PrintResponse();
@@ -39,6 +45,7 @@ public class PrintController {
         return ResponseEntity.status(HttpStatus.OK).body(printResponse);
     }
 
+    @ApiOperation("條碼補印")
     @PostMapping("/barcode/reprint")
     public ResponseEntity<PrintResponse> reprintBarcode(@RequestBody @Valid BarcodeItem barcodeItem) {
         PrintResponse printResponse = new PrintResponse();
@@ -55,6 +62,7 @@ public class PrintController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(printResponse);
     }
 
+    @ApiOperation("棧板列印")
     @PostMapping("/pallet/print")
     public ResponseEntity<PrintResponse> printPallet(@RequestBody @Valid PalletItem palletItem) {
         PrintResponse printResponse = new PrintResponse();
@@ -72,6 +80,7 @@ public class PrintController {
         return ResponseEntity.status(HttpStatus.OK).body(printResponse);
     }
 
+    @ApiOperation("棧板補印")
     @PostMapping("/pallet/reprint")
     public ResponseEntity<PrintResponse> reprintPallet(@RequestBody @Valid PalletItemWithNo palletItemWithNo) {
         PrintResponse printResponse = new PrintResponse();
@@ -88,6 +97,7 @@ public class PrintController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(printResponse);
     }
 
+    @ApiOperation("棧板作廢")
     @PostMapping("/pallet/invalid")
     public ResponseEntity<PrintResponse> invalidPallet(@RequestBody @Valid InvalidPalletRequest invalidPalletRequest) {
         PrintResponse printResponse = new PrintResponse();
