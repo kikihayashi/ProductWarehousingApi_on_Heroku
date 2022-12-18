@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,11 +60,11 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.result[0].IfBiz", equalTo("True")))
                 .andExpect(jsonPath("$.MasterData[0].BillStatus", equalTo(0)))
                 .andExpect(jsonPath("$.MasterData[0].MKOrdNO", equalTo("20221025001")))
-                .andExpect(jsonPath("$.MasterData[0].MKOrdDate", equalTo(20221025)))
+                .andExpect(jsonPath("$.MasterData[0].MKOrdDate", equalTo("20221025")))
                 .andExpect(jsonPath("$.MasterData[0].ProductID", equalTo("A2**")))
                 .andExpect(jsonPath("$.MasterData[0].ProductName", equalTo("(半成品-分級)棒腿-多品")))
                 .andExpect(jsonPath("$.MasterData[0].srcNoInQty", equalTo("0")))
-                .andExpect(jsonPath("$.MasterData[0].EstWareInDate", equalTo(20221025)))
+                .andExpect(jsonPath("$.MasterData[0].EstWareInDate", equalTo("20221025")))
                 .andExpect(jsonPath("$.MasterData[0].DetailData1[1].RowNo", equalTo(2)))
                 .andExpect(jsonPath("$.MasterData[0].DetailData1[1].NCTProdID", equalTo("A2-02")));
     }

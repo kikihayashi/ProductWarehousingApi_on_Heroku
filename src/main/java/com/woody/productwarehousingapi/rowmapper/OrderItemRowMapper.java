@@ -13,11 +13,11 @@ public class OrderItemRowMapper implements RowMapper<OrderItem> {
         OrderItem orderItem = new OrderItem();
         orderItem.setBillStatus(resultSet.getInt("bill_status"));
         orderItem.setOrderNo(resultSet.getString("order_no"));
-        orderItem.setOrderDate(resultSet.getInt("order_date"));
+        orderItem.setOrderDate(resultSet.getDate("order_date"));
         orderItem.setProductID(resultSet.getString("product_id"));
         orderItem.setProductName(resultSet.getString("product_name"));
         orderItem.setSrcNoInQty(resultSet.getString("src_qty"));
-        orderItem.setEstWareInDate(resultSet.getInt("est_date"));
+        orderItem.setEstWareInDate(resultSet.getDate("est_date"));
         orderItem.setRowNo(resultSet.getInt("row_no"));
         orderItem.setNctProductId(resultSet.getString("nct_product_id"));
 //        orderItem.setCreatedDate(resultSet.getTimestamp("created_date"));

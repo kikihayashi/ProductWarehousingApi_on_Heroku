@@ -1,8 +1,12 @@
 package com.woody.productwarehousingapi.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 //若回傳參數有Null則忽略該參數(不轉成json)
@@ -71,7 +75,8 @@ public class OrderResponse {
         @JsonProperty("MKOrdNO")
         private String orderNo;
         @JsonProperty("MKOrdDate")
-        private Integer orderDate;
+        @JsonFormat(pattern = "yyyyMMdd")
+        private Date orderDate;
         @JsonProperty("ProductID")
         private String productID;
         @JsonProperty("ProductName")
@@ -79,7 +84,8 @@ public class OrderResponse {
         @JsonProperty("srcNoInQty")
         private String srcNoInQty;
         @JsonProperty("EstWareInDate")
-        private Integer estWareInDate;
+        @JsonFormat(pattern = "yyyyMMdd")
+        private Date estWareInDate;
 
         @JsonProperty("DetailData1")
         private List<DetailData1> detailData1List;
@@ -100,11 +106,11 @@ public class OrderResponse {
             this.orderNo = orderNo;
         }
 
-        public Integer getOrderDate() {
+        public Date getOrderDate() {
             return orderDate;
         }
 
-        public void setOrderDate(Integer orderDate) {
+        public void setOrderDate(Date orderDate) {
             this.orderDate = orderDate;
         }
 
@@ -132,11 +138,11 @@ public class OrderResponse {
             this.srcNoInQty = srcNoInQty;
         }
 
-        public Integer getEstWareInDate() {
+        public Date getEstWareInDate() {
             return estWareInDate;
         }
 
-        public void setEstWareInDate(Integer estWareInDate) {
+        public void setEstWareInDate(Date estWareInDate) {
             this.estWareInDate = estWareInDate;
         }
 
