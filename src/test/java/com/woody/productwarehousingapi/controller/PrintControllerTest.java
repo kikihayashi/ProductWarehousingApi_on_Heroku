@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.woody.productwarehousingapi.usersetting.UserSetting.setUser;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,6 +55,8 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
+        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$.Message", equalTo("成功")))
@@ -78,6 +81,8 @@ public class PrintControllerTest {
                 .post("/barcode/print")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
+
+        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -110,6 +115,8 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
+        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(202))
                 .andExpect(jsonPath("$.Message", equalTo("成功")))
@@ -139,6 +146,8 @@ public class PrintControllerTest {
                 .post("/barcode/reprint")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
+
+        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(202))
@@ -176,6 +185,8 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
+        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$.Message", equalTo("成功")));
@@ -200,6 +211,8 @@ public class PrintControllerTest {
                 .post("/pallet/print")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
+
+        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -251,6 +264,8 @@ public class PrintControllerTest {
                 .post("/pallet/reprint")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
+
+        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(202))
@@ -305,6 +320,8 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
+        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(202))
                 .andExpect(jsonPath("$.Message", equalTo("失敗，棧板號:" + palletItemWithNo.getPalletNo() + "不存在")));
@@ -343,9 +360,50 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
+        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(202))
                 .andExpect(jsonPath("$.Message", equalTo("成功")));
+    }
+
+    @Transactional
+    @Test
+    public void invalidPallet_forbidden() throws Exception {
+        BarcodeItem barcodeItem = new BarcodeItem();
+        barcodeItem.setPrintIp("192.168.9.209");
+        barcodeItem.setProductName("(半成品-分級)棒腿-多品");
+        barcodeItem.setLotName("醬燒大排10片-6kg/箱-白2");
+        barcodeItem.setQrcode("20210104001;20221019;B2-02;20221019;20231019;0;11000004;1");
+        barcodeItem.setValidDay("365");
+        barcodeItem.setWeightMax("0");
+        barcodeItem.setWeightMin("0");
+
+        printService.createBarcode(barcodeItem);
+
+        InvalidPalletRequest invalidPalletRequest = new InvalidPalletRequest();
+        invalidPalletRequest.setCompany("99");
+        List<InvalidPalletRequest.SerialQuery> list = new ArrayList<>();
+        InvalidPalletRequest.SerialQuery query = new InvalidPalletRequest.SerialQuery();
+        query.setOrderId("20210104001");
+        query.setProductId("B2-02");
+        query.setLotId("20221019");
+        query.setSerialId("11000004");
+        list.add(query);
+        invalidPalletRequest.setSerialQueryList(list);
+
+        String json = objectMapper.writeValueAsString(invalidPalletRequest);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/pallet/invalid")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        requestBuilder = setUser("staff", "5678", "normal", requestBuilder);
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().is(403))
+                .andExpect(jsonPath("$.message", equalTo("權限不足，無法操作此項目")));
     }
 
 }
