@@ -18,7 +18,7 @@ public class MyAccessDeniedHandler implements AccessDeniedHandler {
 
         Map<String, String> result = new HashMap<>();
         result.put("status", "error");
-        result.put("message", "權限不足，無法操作此項目");
+        result.put("message", "權限不足，無法操作此項目！");
 
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);//回應403狀態
         response.setContentType("application/json;charset=UTF-8");

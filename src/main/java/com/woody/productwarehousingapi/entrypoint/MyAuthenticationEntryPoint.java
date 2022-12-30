@@ -17,7 +17,7 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         Map<String, String> result = new HashMap<>();
         result.put("status", "error");
-        result.put("message", "尚未取得權限");
+        result.put("message", "尚未取得權限！");
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json;charset=UTF-8");
