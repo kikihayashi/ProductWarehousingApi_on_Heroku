@@ -103,15 +103,10 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         //將自訂的 JSON 資料寫入回應
         Map<String, String> result = new HashMap<>();
         result.put("status", "error");
-        result.put("message", "錯誤的帳號或密碼！");
+        result.put("message", "帳號密碼有誤！");
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(CONTENT_TYPE);
         objectMapper.writeValue(response.getOutputStream(), result);
     }
 }
-
-
-
-
-
