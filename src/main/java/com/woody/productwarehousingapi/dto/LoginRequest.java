@@ -9,7 +9,6 @@ public class LoginRequest {
     @NotEmpty
     private String password;
 
-
     public String getAccount() {
         return account;
     }

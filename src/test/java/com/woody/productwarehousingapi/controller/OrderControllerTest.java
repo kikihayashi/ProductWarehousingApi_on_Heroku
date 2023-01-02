@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.woody.productwarehousingapi.usersetting.UserSetting.setUser;
+import static com.woody.productwarehousingapi.utils.SecurityTestUtils.setUser;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,7 +54,7 @@ public class OrderControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -96,7 +96,7 @@ public class OrderControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -124,7 +124,7 @@ public class OrderControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -156,7 +156,7 @@ public class OrderControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))

@@ -15,7 +15,6 @@ public class MyAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-
         Map<String, String> result = new HashMap<>();
         result.put("status", "error");
         result.put("message", "權限不足，無法操作此項目！");

@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.woody.productwarehousingapi.usersetting.UserSetting.setUser;
+import static com.woody.productwarehousingapi.utils.SecurityTestUtils.setUser;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -55,7 +55,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -82,7 +82,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -115,7 +115,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(202))
@@ -147,7 +147,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(202))
@@ -185,7 +185,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -212,7 +212,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -265,7 +265,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(202))
@@ -320,7 +320,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(202))
@@ -360,7 +360,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("admin", "1234", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(202))
@@ -399,11 +399,10 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("staff", "5678", "normal", requestBuilder);
+        requestBuilder = setUser("username", "password", "normal", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(403))
-                .andExpect(jsonPath("$.message", equalTo("權限不足，無法操作此項目")));
+                .andExpect(jsonPath("$.message", equalTo("權限不足，無法操作此項目！")));
     }
-
 }

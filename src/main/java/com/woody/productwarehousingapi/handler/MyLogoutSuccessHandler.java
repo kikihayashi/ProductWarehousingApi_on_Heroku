@@ -22,7 +22,6 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         Map<String, String> result = new HashMap<>();
-
         result.put("message", "logout success");
 
         response.setStatus(HttpServletResponse.SC_OK);

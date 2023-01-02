@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS user_list
     account            VARCHAR(32)  NOT NULL,
     password           CLOB         NOT NULL,
     role               VARCHAR(128) NOT NULL,
+    enable             BOOLEAN      NOT NULL,
     created_date       TIMESTAMP    NOT NULL,
     last_modified_date TIMESTAMP    NOT NULL,
     PRIMARY KEY (account),

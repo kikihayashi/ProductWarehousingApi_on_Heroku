@@ -18,14 +18,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class MyAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     private static final String POST = "POST";
     private static final String CONTENT_TYPE = "application/json;charset=UTF-8";
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public JsonUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public MyAuthenticationFilter(AuthenticationManager authenticationManager) {
         super("/login");
         setAuthenticationManager(authenticationManager);
     }
@@ -36,7 +36,6 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
      * 接下來，我們檢查用戶名和密碼是否都存在，如果不存在，則拋出相應的異常。
      * 最後，我們使用用戶名和密碼創建一個新的UsernamePasswordAuthenticationToken對象，並使用身份驗證管理器調用authenticate方法進行身份驗證。
      */
-
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         if (!POST.equals(request.getMethod())) {
@@ -98,7 +97,6 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
             throws IOException, ServletException {
         //清除SecurityContext中的身份驗證信息
         SecurityContextHolder.clearContext();
-//        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
 
         //將自訂的 JSON 資料寫入回應
         Map<String, String> result = new HashMap<>();

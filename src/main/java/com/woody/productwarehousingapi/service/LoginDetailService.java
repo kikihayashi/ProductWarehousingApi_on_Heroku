@@ -1,4 +1,4 @@
-package com.woody.productwarehousingapi.service.impl;
+package com.woody.productwarehousingapi.service;
 
 import com.woody.productwarehousingapi.dao.LoginDao;
 import com.woody.productwarehousingapi.dto.LoginItem;
@@ -10,8 +10,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/**
+ * 標記 @Service 讓Spring可以自動地將這個類別的實例納入Spring容器中
+ */
 @Service
-public class LoginDetailServiceImpl implements UserDetailsService {
+public class LoginDetailService implements UserDetailsService {
     @Autowired
     private LoginDao loginDao;
 

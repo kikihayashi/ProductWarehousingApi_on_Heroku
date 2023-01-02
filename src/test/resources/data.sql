@@ -1,11 +1,11 @@
 -- user_list
-INSERT INTO user_list (user_name, account, password, role, created_date, last_modified_date)
+INSERT INTO user_list (user_name, account, password, role, enable, created_date, last_modified_date)
 VALUES ('管理員', 'admin', '$2a$10$ImVdIzxYdYmwlFbM9s1yuuc6HRRQfEJRuh3BnhOV5d1xDJ0ZpO9rW',
-        'admin','2022-12-29 16:08:05','2022-12-29 16:08:05');
+        'admin', true, '2022-12-29 16:08:05','2022-12-29 16:08:05');
 
-INSERT INTO user_list (user_name, account, password, role, created_date, last_modified_date)
+INSERT INTO user_list (user_name, account, password, role, enable, created_date, last_modified_date)
 VALUES ('員工', 'staff', '$2a$10$c/So5rcv8en7B/TOoC8HReIxhRm2CXkj74HzH//O1LGkHUtMu3gxC',
-        'normal','2022-12-29 16:09:05','2022-12-29 16:09:05');
+        'normal', true, '2022-12-29 16:09:05','2022-12-29 16:09:05');
 
 -- order_list
 INSERT INTO order_list (bill_status, order_no, order_date, product_id, product_name, src_qty, est_date, created_date,
