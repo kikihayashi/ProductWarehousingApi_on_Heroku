@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +39,11 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(orderResponse);
     }
 
+
+    /**
+     * 使用PreAuthorize前，需再SecurityConfiguration中加上
+     * EnableWebSecurity、EnableGlobalMethodSecurity(prePostEnabled = true)這兩個註釋
+     * */
     @ApiOperation("取得成品詳細資訊")
     @PostMapping("/info")
     public ResponseEntity<InfoResponse> getInfo(@RequestBody @Valid InfoRequest infoRequest) {

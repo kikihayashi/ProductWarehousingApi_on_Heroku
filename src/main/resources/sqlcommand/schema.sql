@@ -1,3 +1,16 @@
+CREATE TABLE IF NOT EXISTS user_list
+(
+    user_id            INT          NOT NULL UNIQUE KEY AUTO_INCREMENT,
+    user_name          VARCHAR(16)  NOT NULL,
+    account            VARCHAR(32)  NOT NULL,
+    password           LONGTEXT     NOT NULL,
+    role               VARCHAR(128) NOT NULL,
+    enable             BOOLEAN      NOT NULL,
+    created_date       TIMESTAMP    NOT NULL,
+    last_modified_date TIMESTAMP    NOT NULL,
+    PRIMARY KEY (account)
+    );
+
 CREATE TABLE IF NOT EXISTS order_list
 (
     order_id           INT          NOT NULL UNIQUE KEY AUTO_INCREMENT,

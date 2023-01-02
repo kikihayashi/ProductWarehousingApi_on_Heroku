@@ -12,11 +12,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
+import static com.woody.productwarehousingapi.utils.SecurityTestUtils.setUser;
+import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,6 +32,7 @@ public class OrderControllerTest {
     // 查詢訂單
     @Test
     public void getOrder_success() throws Exception {
+
         OrderRequest orderRequest = new OrderRequest();
         orderRequest.setCompanyId("99");
         orderRequest.setUserId("administrator");
@@ -53,6 +54,8 @@ public class OrderControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$.result[0].IfSucceed", equalTo("True")))
@@ -68,6 +71,7 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.MasterData[0].DetailData1[1].RowNo", equalTo(2)))
                 .andExpect(jsonPath("$.MasterData[0].DetailData1[1].NCTProdID", equalTo("A2-02")));
     }
+
 
     @Test
     public void getOrder_notExistOrder() throws Exception {
@@ -91,6 +95,8 @@ public class OrderControllerTest {
                 .post("/order")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
+
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -117,6 +123,8 @@ public class OrderControllerTest {
                 .post("/info")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
+
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -148,8 +156,13 @@ public class OrderControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$.Message", equalTo("失敗")));
     }
+
+
+
 }

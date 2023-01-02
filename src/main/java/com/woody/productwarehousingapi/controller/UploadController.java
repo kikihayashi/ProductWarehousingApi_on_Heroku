@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,7 @@ public class UploadController {
 
     @ApiOperation("上傳入庫資訊")
     @PostMapping("/upload")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> upload(@RequestBody @Valid UploadRequest uploadRequest) {
         UploadResponse uploadResponse = new UploadResponse();
         UploadResponse.Result result = new UploadResponse.Result();
@@ -47,6 +49,7 @@ public class UploadController {
 
     @ApiOperation("上傳資料庫")
     @PostMapping("/uploadDB")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> uploadDatabase(@RequestParam("file") MultipartFile file) {
         uploadService.storeFile(file);
         UploadResponse uploadResponse = new UploadResponse();

@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.woody.productwarehousingapi.utils.SecurityTestUtils.setUser;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -139,6 +140,8 @@ public class UploadControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(201))
                 .andExpect(jsonPath("$.Result.IfSucceed", equalTo("True")))
@@ -249,6 +252,8 @@ public class UploadControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(201))
                 .andExpect(jsonPath("$.Result.IfSucceed", equalTo("True")))
@@ -258,6 +263,8 @@ public class UploadControllerTest {
                 .post("/upload")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
+
+        requestBuilder = setUser("username", "password", "admin", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(201))
