@@ -19,7 +19,6 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public LoginItem findUserByAccount(String account) {
-        System.out.println("findUserByAccount");
         String sqlCommand = "SELECT user_name, account, password, role " +
                 "FROM user_list " +
                 "WHERE account = :account";

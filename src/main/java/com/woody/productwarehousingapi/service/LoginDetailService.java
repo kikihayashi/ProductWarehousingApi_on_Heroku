@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
+ * 身份驗證管理器的實作方法一：需要實作UserDetailsService
  * 標記 @Service 讓Spring可以自動地將這個類別的實例納入Spring容器中
  */
 @Service

@@ -4,6 +4,7 @@ import com.woody.productwarehousingapi.entrypoint.MyAuthenticationEntryPoint;
 import com.woody.productwarehousingapi.filter.MyAuthenticationFilter;
 import com.woody.productwarehousingapi.handler.MyAccessDeniedHandler;
 import com.woody.productwarehousingapi.handler.MyLogoutSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -25,10 +27,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfiguration  extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     /**
      * 一定要建立密碼演算的實例(密碼解密)
+     * 方法名稱可以自訂，需要加上@Bean註釋
      * 通常在 configure(AuthenticationManagerBuilder auth) 方法內部使用。
      */
     @Bean
@@ -36,36 +39,53 @@ public class SecurityConfiguration  extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Value("${spring.datasource.url}")
-    private String dbUrl;
-    @Value("${spring.datasource.username}")
-    private String username;
-    @Value("${spring.datasource.password}")
-    private String password;
+    /**
+     * 身份驗證管理器的實作方法一：需要注入實作UserDetailsService的Bean(這裡是LoginDetailService)
+     */
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    /**
+     * 身份驗證管理器的實作方法二：需要以下application.properties資料
+     * */
+//    @Value("${spring.datasource.url}")
+//    private String dbUrl;
+//    @Value("${spring.datasource.username}")
+//    private String username;
+//    @Value("${spring.datasource.password}")
+//    private String password;
 
     /**
      * Step.1 設定的身份驗證管理器
-     * */
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        //配置身份驗證
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl(dbUrl);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
+        /**
+         * 身份驗證管理器的實作方法一：需要實作UserDetailsService的Bean(這裡是LoginDetailService)
+         * */
+        auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
 
-        String sql = "SELECT account, password, enable FROM user_list WHERE account = ? AND enable = true";
-        String authorSql = "SELECT account, role FROM user_list WHERE account = ?";
-
-        auth.jdbcAuthentication()//設定身份驗證管理器的方法
-                .dataSource(dataSource)
-                .usersByUsernameQuery(sql)
-                .authoritiesByUsernameQuery(authorSql);
+        /**
+         *身份驗證管理器的實作方法二：需要以下配置
+         * */
+//        //配置身份驗證
+//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+//        dataSource.setUrl(dbUrl);
+//        dataSource.setUsername(username);
+//        dataSource.setPassword(password);
+//
+//        String sql = "SELECT account, password, enable FROM user_list WHERE account = ? AND enable = true";
+//        String authorSql = "SELECT account, role FROM user_list WHERE account = ?";
+//
+//        auth.jdbcAuthentication()//設定身份驗證管理器的方法
+//                .dataSource(dataSource)
+//                .usersByUsernameQuery(sql)
+//                .authoritiesByUsernameQuery(authorSql);
     }
 
     /**
      * Step.2 設定的 HTTP 安全性設定
-     * */
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //關閉防護(這樣就不用token)，測試可以寫，正式的話要註解掉
