@@ -103,6 +103,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/api").hasIpAddress("127.0.0.1")//限制只有從IP地址為127.0.0.1 的請求才能訪問 /api路徑
 //                .antMatchers("/order").hasAnyAuthority("admin", "normal")
 //                .antMatchers("/info").hasAuthority("admin")
+//                .antMatchers("/order").hasAnyRole("manager", "worker")
+//                .antMatchers("/info").hasRole("manager")
                 .anyRequest().authenticated();//其他都要被驗證
 
         //Step.3 異常處理，如果使用者沒有擁有足夠的權限，則會執行authenticationEntryPoint設定的驗證入口處理。

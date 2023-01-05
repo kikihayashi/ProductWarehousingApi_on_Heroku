@@ -13,10 +13,11 @@ public class SecurityTestUtils {
      * "不"需要在 data.sql中建立使用者資料，此為虛擬的資料
      * 設置使用者的帳號、密碼、權限，並放入RequestBuilder中
      */
-    public static MockHttpServletRequestBuilder setUser(String account, String password, String authority, RequestBuilder requestBuilder) {
+    public static MockHttpServletRequestBuilder setUser(String account, String password, String authority, String role, RequestBuilder requestBuilder) {
         UserDetails userDetails = User.withUsername(account)
                 .password(password)
                 .authorities(authority)
+                .roles(role)
                 .build();
         return ((MockHttpServletRequestBuilder) requestBuilder).with(user(userDetails));
     }

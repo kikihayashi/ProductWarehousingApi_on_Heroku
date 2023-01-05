@@ -54,7 +54,7 @@ public class OrderControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", "manager", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -96,7 +96,7 @@ public class OrderControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", "manager", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -124,7 +124,7 @@ public class OrderControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", "manager", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -156,13 +156,12 @@ public class OrderControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+        requestBuilder = setUser("username", "password", "admin", "manager", requestBuilder);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$.Message", equalTo("失敗")));
     }
-
 
 
 }

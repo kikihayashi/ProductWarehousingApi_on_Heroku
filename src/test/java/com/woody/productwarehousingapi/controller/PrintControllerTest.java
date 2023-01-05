@@ -5,6 +5,7 @@ import com.woody.productwarehousingapi.dto.BarcodeItem;
 import com.woody.productwarehousingapi.dto.InvalidPalletRequest;
 import com.woody.productwarehousingapi.dto.PalletItem;
 import com.woody.productwarehousingapi.dto.PalletItemWithNo;
+import com.woody.productwarehousingapi.service.LoginDetailService;
 import com.woody.productwarehousingapi.service.PrintService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,20 +14,24 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.woody.productwarehousingapi.utils.SecurityTestUtils.setUser;
 import static org.hamcrest.Matchers.equalTo;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 public class PrintControllerTest {
+
+    @Autowired
+    private LoginDetailService loginDetailService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -55,7 +60,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+        requestBuilder = ((MockHttpServletRequestBuilder) requestBuilder).with(user(loginDetailService.loadUserByUsername("admin")));
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -82,7 +87,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+        requestBuilder = ((MockHttpServletRequestBuilder) requestBuilder).with(user(loginDetailService.loadUserByUsername("admin")));
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -115,7 +120,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+        requestBuilder = ((MockHttpServletRequestBuilder) requestBuilder).with(user(loginDetailService.loadUserByUsername("admin")));
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(202))
@@ -147,7 +152,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+        requestBuilder = ((MockHttpServletRequestBuilder) requestBuilder).with(user(loginDetailService.loadUserByUsername("admin")));
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(202))
@@ -185,7 +190,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+        requestBuilder = ((MockHttpServletRequestBuilder) requestBuilder).with(user(loginDetailService.loadUserByUsername("admin")));
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -212,7 +217,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+        requestBuilder = ((MockHttpServletRequestBuilder) requestBuilder).with(user(loginDetailService.loadUserByUsername("admin")));
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200))
@@ -265,7 +270,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+        requestBuilder = ((MockHttpServletRequestBuilder) requestBuilder).with(user(loginDetailService.loadUserByUsername("admin")));
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(202))
@@ -320,7 +325,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+        requestBuilder = ((MockHttpServletRequestBuilder) requestBuilder).with(user(loginDetailService.loadUserByUsername("admin")));
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(202))
@@ -360,7 +365,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("username", "password", "admin", requestBuilder);
+        requestBuilder = ((MockHttpServletRequestBuilder) requestBuilder).with(user(loginDetailService.loadUserByUsername("admin")));
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(202))
@@ -399,7 +404,7 @@ public class PrintControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        requestBuilder = setUser("username", "password", "normal", requestBuilder);
+        requestBuilder = ((MockHttpServletRequestBuilder) requestBuilder).with(user(loginDetailService.loadUserByUsername("staff")));
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(403))

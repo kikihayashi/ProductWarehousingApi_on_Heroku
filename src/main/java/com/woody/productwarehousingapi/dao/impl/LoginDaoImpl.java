@@ -21,7 +21,7 @@ public class LoginDaoImpl implements LoginDao {
     public LoginItem findUserByAccount(String account) {
         String sqlCommand = "SELECT user_name, account, password, role " +
                 "FROM user_list " +
-                "WHERE account = :account";
+                "WHERE account = :account AND enable = true";
 
         Map<String, Object> map = new HashMap<>();
         map.put("account", account);

@@ -100,7 +100,7 @@ public class PrintController {
 
     @ApiOperation("棧板作廢")
     @PostMapping("/pallet/invalid")
-    @PreAuthorize("hasAuthority('admin')")
+    @PreAuthorize("hasAuthority('admin') && hasRole('manager')")
     public ResponseEntity<PrintResponse> invalidPallet(@RequestBody @Valid InvalidPalletRequest invalidPalletRequest) {
         PrintResponse printResponse = new PrintResponse();
 

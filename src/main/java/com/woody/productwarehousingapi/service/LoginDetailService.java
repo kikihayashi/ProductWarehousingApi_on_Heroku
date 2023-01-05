@@ -33,7 +33,7 @@ public class LoginDetailService implements UserDetailsService {
         return new User(
                 username,
                 password,
-                AuthorityUtils.createAuthorityList(authority));
-//                AuthorityUtils.commaSeparatedStringToAuthorityList(authority));
+//                AuthorityUtils.createAuthorityList(authority));
+                AuthorityUtils.commaSeparatedStringToAuthorityList(authority));
     }
 }
