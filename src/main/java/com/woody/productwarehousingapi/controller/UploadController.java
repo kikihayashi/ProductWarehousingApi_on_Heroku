@@ -26,7 +26,7 @@ public class UploadController {
 
     @ApiOperation("上傳入庫資訊")
     @PostMapping("/upload")
-    @PreAuthorize("hasAuthority('admin')")
+    @PreAuthorize("hasAuthority('admin') && hasRole('manager')")
     public ResponseEntity<?> upload(@RequestBody @Valid UploadRequest uploadRequest) {
         UploadResponse uploadResponse = new UploadResponse();
         UploadResponse.Result result = new UploadResponse.Result();
@@ -49,7 +49,7 @@ public class UploadController {
 
     @ApiOperation("上傳資料庫")
     @PostMapping("/uploadDB")
-    @PreAuthorize("hasAuthority('admin')")
+    @PreAuthorize("hasAuthority('admin') && hasRole('manager')")
     public ResponseEntity<?> uploadDatabase(@RequestParam("file") MultipartFile file) {
         uploadService.storeFile(file);
         UploadResponse uploadResponse = new UploadResponse();
