@@ -98,6 +98,10 @@ public class PrintController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(printResponse);
     }
 
+    /**
+     * 使用PreAuthorize前，需再SecurityConfiguration中加上
+     * EnableWebSecurity、EnableGlobalMethodSecurity(prePostEnabled = true)這兩個註釋
+     * */
     @ApiOperation("棧板作廢")
     @PostMapping("/pallet/invalid")
     @PreAuthorize("hasAuthority('admin') && hasRole('manager')")

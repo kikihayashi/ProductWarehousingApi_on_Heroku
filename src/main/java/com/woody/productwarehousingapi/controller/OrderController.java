@@ -39,11 +39,6 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(orderResponse);
     }
 
-
-    /**
-     * 使用PreAuthorize前，需再SecurityConfiguration中加上
-     * EnableWebSecurity、EnableGlobalMethodSecurity(prePostEnabled = true)這兩個註釋
-     * */
     @ApiOperation("取得成品詳細資訊")
     @PostMapping("/info")
     public ResponseEntity<InfoResponse> getInfo(@RequestBody @Valid InfoRequest infoRequest) {

@@ -24,6 +24,10 @@ public class UploadController {
     @Autowired
     private UploadService uploadService;
 
+    /**
+     * 使用PreAuthorize前，需再SecurityConfiguration中加上
+     * EnableWebSecurity、EnableGlobalMethodSecurity(prePostEnabled = true)這兩個註釋
+     * */
     @ApiOperation("上傳入庫資訊")
     @PostMapping("/upload")
     @PreAuthorize("hasAuthority('admin') && hasRole('manager')")

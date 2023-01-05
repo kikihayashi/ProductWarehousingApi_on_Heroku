@@ -65,7 +65,7 @@ public class MyAuthenticationFilter extends AbstractAuthenticationProcessingFilt
 
     /**
      * 在這個過濾器中，我們實現了successfulAuthentication和unsuccessfulAuthentication方法。
-     * 如果身份驗證成功，則successfulAuthentication方法將將身份驗證結果設置到安全上下文中，然後將請求轉發到應用程序的其他部分。
+     * 如果身份驗證成功，則successfulAuthentication方法將身份驗證結果設置到安全上下文中，然後將請求轉發到應用程序的其他部分。
      * 如果身份驗證失敗，則unsuccessfulAuthentication方法將清除安全上下文，並將HTTP 401 Unauthorized錯誤返回給客戶端。
      */
     @Override

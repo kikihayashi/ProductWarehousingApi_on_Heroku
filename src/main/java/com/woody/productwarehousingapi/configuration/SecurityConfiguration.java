@@ -116,7 +116,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         //登出設定
         http.logout()
                 .logoutUrl("/logout")
-                .logoutSuccessHandler(new MyLogoutSuccessHandler())
+                .logoutSuccessHandler(new MyLogoutSuccessHandler())//處理登出後的回傳訊息
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");
     }
