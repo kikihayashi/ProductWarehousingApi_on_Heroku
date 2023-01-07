@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +22,21 @@ import javax.validation.Valid;
 //@RequestMapping(path = "/root客製")
 public class UploadController {
 
+    /**
+     * 使用前，需再SecurityConfiguration中加上
+     * EnableWebSecurity、EnableGlobalMethodSecurity(以下方法名稱 = true)這兩個註釋
+     * 或在 Application上面加上EnableGlobalMethodSecurity(以下方法名稱 = true)註釋
+     *
+     * @Secured({"ROLE_manager","ROLE_worker"}) -> 執行方法前的權限驗證，有這兩個角色(任意一個)，才能使用
+     * @PreAuthorize("hasAuthority('admin')") -> 執行方法前的權限驗證，有這個權限才能使用
+     * @PostAuthorize("hasAuthority('admin')") -> 執行方法後再權限驗證，適合驗證帶有返回值的方法
+     * @PreFilter(value="filterObject.id%2==0") -> 執行方法前對傳入資料進行過濾。例如：只取得id為偶數的資料
+     * @PostFilter("filterObject.username=='admin'") -> 執行方法後對回傳資料進行過濾。例如：只回傳username=admin的資料
+     * */
+
     @Autowired
     private UploadService uploadService;
 
-    /**
-     * 使用PreAuthorize前，需再SecurityConfiguration中加上
-     * EnableWebSecurity、EnableGlobalMethodSecurity(prePostEnabled = true)這兩個註釋
-     * */
     @ApiOperation("上傳入庫資訊")
     @PostMapping("/upload")
     @PreAuthorize("hasAuthority('admin') && hasRole('manager')")

@@ -1,3 +1,12 @@
+-- 這是避免使用maven建構jar檔時，發生JdbcSQLIntegrityConstraintViolationException，主鍵重複插入的情況
+DROP TABLE IF EXISTS user_list;
+DROP TABLE IF EXISTS order_list;
+DROP TABLE IF EXISTS info_list;
+DROP TABLE IF EXISTS barcode_list;
+DROP TABLE IF EXISTS pallet_list;
+DROP TABLE IF EXISTS serial_list;
+DROP TABLE IF EXISTS warehouse_list;
+
 CREATE TABLE IF NOT EXISTS user_list
 (
     user_id            INT          NOT NULL AUTO_INCREMENT,
