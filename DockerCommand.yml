@@ -1,0 +1,49 @@
+ENV SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=10MB
+ENV SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE=50MB
+ENV SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+ENV MYSQL_HOST=localhost
+ENV MYSQL_PORT=3306
+ENV MYSQL_DATABASE=productwarehousing
+ENV MYSQL_TIMEZONE=Asia/Taipei
+ENV MYSQL_ENCODING=utf-8
+ENV MYSQL_USER=root
+ENV MYSQL_PASSWORD=kikihayashi0425
+ENV JACKSON_TIME_ZONE='GMT+8'
+ENV JACKSON_DATE_FORMAT='yyyy-MM-dd HH:mm:ss'
+  
+#使用apk命令安裝MySQL客戶端
+RUN apk add --no-cache mysql-client
+  
+#建立程式資料夾(指的是在容器裡面，非實體主機目錄上，如果app 這個目錄不存在，會建立app、resources資料夾)
+RUN mkdir -p /app/resources
+  
+#設定容器內的 /tmp 目錄將被指定為數據源，也就是說在容器內的 /tmp 目錄的檔案和資料將會被持久化。
+#也就是說，即使重建容器或移除容器，/tmp 目錄的檔案和資料依然會存在。
+VOLUME /tmp
+  
+#將sqlCommand裡的所有資料放在 容器中的/app/resources內
+COPY /src/main/resources/sqlCommand/ /app/resources/
+
+#1.使用 OpenJDK 11 image
+FROM openjdk:11
+#啟動JVM並執行jar檔
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+
+#建立程式資料夾(指的是在容器裡面，非實體主機目錄上)
+RUN mkdir /app
+
+#將可執行的程式放在 /app 內
+COPY src/main/java/com/woody/productwarehousingapi/ /app
+
+#設定執行工作目錄
+WORKDIR /app
+
+#執行程式
+CMD java ProductwarehousingapiApplication
+
+#使用了add指令下載了一個名為wait的工具，用於在啟動容器時等待MySQL服務啟動。
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /wait
+RUN chmod +x /wait
+
+#啟動JVM並執行jar檔
+ENTRYPOINT ["/wait","--timeout=60","--strict","--","java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]

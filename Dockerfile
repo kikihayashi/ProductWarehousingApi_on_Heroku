@@ -1,48 +1,29 @@
 #建構Docker Images
-#1.使用 OpenJDK 11 image
-FROM openjdk:11
-
-#使用apk命令安裝MySQL客戶端
-RUN apk add --no-cache mysql-client
+FROM spring-boot-app:v1
 
 # 設定環境變量
-ENV MYSQL_HOST=localhost
-ENV MYSQL_PORT=3306
-ENV MYSQL_DATABASE=productwarehousing
-ENV MYSQL_TIMEZONE=Asia/Taipei
-ENV MYSQL_ENCODING=utf-8
-ENV MYSQL_USER=root
-ENV MYSQL_PASSWORD=kikihayashi0425
-
-#將容器中的目錄掛載到主機上，可以在容器外存取容器中的文件
-VOLUME /tmp
+#註：在 Dockerfile 中設定環境變量，代表這些環境變量將在建立 Docker 鏡像時就已經設定好了。
+#也就是說，在鏡像建立完成後，無論如何修改這些環境變量的值，都無法在這個鏡像上生效。
+ENV SPRING_DATASOURCE_DRIVER_CLASS_NAME ${DRIVER_CLASS_NAME}
+ENV MYSQL_DATABASE ${DATABASE}
+ENV MYSQL_USER ${USER}
+ENV MYSQL_PASSWORD ${PASSWORD}
+ENV MYSQL_HOST ${HOST}
+ENV MYSQL_PORT ${PORT}
+ENV MYSQL_TIMEZONE ${TIMEZONE}
+ENV MYSQL_ENCODING ${ENCODING}
+#Max size per file the upload supports is 10MB
+ENV SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE ${MAX_FILE_SIZE}
+#Max size of the whole request is 50MB;
+ENV SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE ${MAX_REQUEST_SIZE}
+#台灣時區(GMT+8)英國時區(GMT+0)
+ENV JACKSON_TIME_ZONE ${JSON_TIME_ZONE}
+#時間格式
+ENV JACKSON_DATE_FORMAT ${JSON_DATE_FORMAT}
 
 #定義了一個名為JAR_FILE的參數，並將其預設值設置為target/*.jar
 ARG JAR_FILE=target/*.jar
 
-#將指定的JAR檔複製到容器中，並將其命名為app.jar。
-COPY ${JAR_FILE} app.jar
+#將指定的JAR檔複製到容器的app資料夾中，並將其命名為app.jar。
+COPY ${JAR_FILE} /app/app.jar
 
-#使用了add指令下載了一個名為wait的工具，用於在啟動容器時等待MySQL服務啟動。
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /wait
-RUN chmod +x /wait
-
-#啟動JVM並執行jar檔
-ENTRYPOINT ["/wait","--timeout=60","--strict","--","java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
-
-#啟動JVM並執行jar檔
-#ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
-
-
-
-##建立程式資料夾(指的是在容器裡面，非實體主機目錄上)
-#RUN mkdir /app
-#
-##將可執行的程式放在 /app 內
-#COPY src/main/java/com/woody/productwarehousingapi/ /app
-#
-##設定執行工作目錄
-#WORKDIR /app
-#
-##執行程式
-#CMD java ProductwarehousingapiApplication
