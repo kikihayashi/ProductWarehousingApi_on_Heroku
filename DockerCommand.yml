@@ -46,7 +46,7 @@ WORKDIR /app
 CMD java ProductwarehousingapiApplication
 
 #使用了add指令下載了一個名為wait的工具，用於在啟動容器時等待MySQL服務啟動。
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /wait
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /wait
 RUN chmod +x /wait
 
 #啟動JVM並執行jar檔

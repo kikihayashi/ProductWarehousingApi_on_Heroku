@@ -21,9 +21,12 @@ FROM openjdk:11
 ##時間格式
 #ENV JACKSON_DATE_FORMAT='yyyy-MM-dd HH:mm:ss'
 
+#使用了add指令下載了一個名為wait的工具，用於在啟動容器時等待MySQL服務啟動。
+#https://github.com/ufoscout/docker-compose-wait
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /wait
+RUN chmod +x /wait
+
 #定義了一個名為JAR_FILE的參數，並將其預設值設置為target/*.jar
 ARG JAR_FILE=target/*.jar
 #將指定的JAR檔複製到容器的app資料夾中，並將其命名為app.jar。
 COPY ${JAR_FILE} /app/app.jar
-
-ENTRYPOINT ["java","-jar","/app/app.jar"]
