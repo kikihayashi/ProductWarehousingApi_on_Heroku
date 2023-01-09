@@ -11,6 +11,10 @@ ENV MYSQL_PASSWORD=kikihayashi0425
 ENV JACKSON_TIME_ZONE='GMT+8'
 ENV JACKSON_DATE_FORMAT='yyyy-MM-dd HH:mm:ss'
   
+#看容器內部資歷
+docker exec -t -i <container_name> /bin/bash
+
+  
 #使用apk命令安裝MySQL客戶端
 RUN apk add --no-cache mysql-client
   
