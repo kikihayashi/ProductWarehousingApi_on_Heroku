@@ -1,45 +1,46 @@
-version: '3'
+version: '3.8'
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql-server
-    #這些環境變量將在 Docker Compose 啟動服務時使用，並覆蓋Dockerfile中設定的環境變量。
+  spring-boot-app:
+    image: spring-boot-app:latest
+    container_name: spring-boot-app
+    #表示從當前目錄中的dockerfile文件中建立image
+    build: .
+    #左邊的端口是主機的端口，右邊的端口是容器的端口。可以通過主機的端口8023存取容器的端口8080
+    ports:
+      - 8023:8080
+    #表示在啟動這個Spring Boot應用程式之前，先讓MySQL服務啟動
+    depends_on:
+      - mysql-server
     environment:
+      MYSQL_ROOT_PASSWORD: kikihayashi0425
+      MYSQL_DATABASE: productwarehousing
+      MYSQL_PORT: 3306
       DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
       DATABASE: productwarehousing
       USER: root
       PASSWORD: kikihayashi0425
-      HOST: localhost
+      HOST: mysql-server
       PORT: 3306
+      TIMEZONE: Asia/Taipei
+      ENCODING: utf-8
+    volumes:
+      - "./src/main/resources/sqlCommand:/app/resources"
+    #可以取代Dockerfile 中的 ENTRYPOINT 指令。
+
+
+  #    command: sh -c "apk add --no-cache mysql-client &&
+  #      mysql localhost -u root -pkikihayashi0425 productwarehousing < /app/resources/schema.sql &&
+  #      mysql localhost -u root -pkikihayashi0425 productwarehousing < /app/resources/data.sql"
+  mysql-server:
+    container_name: mysql-server
+    image: "mysql:8.0"
+    restart: always
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: productwarehousing
+      MYSQL_ROOT_PASSWORD: kikihayashi0425
     #使用volumes配置將MySQL數據庫中的數據持久化到主機上
     #建立app/resources資料夾並將sqlCommand裡的所有資料放在容器中的/app/resources內
     volumes:
       - "D:/Program/Docker Volumn/mysql:/var/lib/mysql"
-      - "/app/resources"
-      - "./src/main/resources/sqlCommand:/app/resources"
-    #執行
-    command: [ "bash", "-c",
-      "mysql -u root -pkikihayashi0425 productwarehousing < /app/resources/schema.sql && 
-      mysql -u root -pkikihayashi0425 productwarehousing < /app/resources/data.sql" ]
-  app:
-    image: spring-boot-app
-    container_name: spring-boot-app
-    environment:
-      TIMEZONE: Asia/Taipei
-      ENCODING: utf-8
-      MAX_FILE_SIZE: 10MB
-      MAX_REQUEST_SIZE: 50MB
-      JSON_TIME_ZONE: 'GMT+8'
-      JSON_DATE_FORMAT: 'yyyy-MM-dd HH:mm:ss'
-    #表示在啟動這個Spring Boot應用程式之前，先讓MySQL服務啟動
-    depends_on:
-      - mysql-server
-    #表示從當前目錄中的dockerfile文件中建立image
-    build: .
-    #可以取代Dockerfile 中的 ENTRYPOINT 指令。
-    command: [ "sh", "-c",
-              "apk add --no-cache mysql-client && 
-              java -Djava.security.egd=file:/dev/./urandom -jar app.jar" ]
-    #左邊的端口是主機的端口，右邊的端口是容器的端口。可以通過主機的端口8023存取容器的端口8080
-    ports:
-      - "8023:8080"
