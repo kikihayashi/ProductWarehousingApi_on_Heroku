@@ -1,31 +1,31 @@
 version: '3.8'
 services:
-  web-app:
-    image: springboot-productwarehousing:1.0
+  web:
     container_name: spring-boot
-    #表示從當前目錄中的dockerfile文件中建立image
-    build: .
+    #表示從當前目錄的Dockerfile文件中建立image
+    build:
+      context: .
+      target: web
+    image: kikihayashi/productwarehousing-springboot:1.5
     #左邊的端口是主機的端口，右邊的端口是容器的端口。可以通過主機的端口8023存取容器的端口8080
     ports:
       - 8023:8080
     #表示在啟動這個Spring Boot應用程式之前，先讓MySQL服務啟動
     depends_on:
-      -  web-db
+      - db
     environment:
       MYSQL_DATABASE: productwarehousing
       MYSQL_ROOT_PASSWORD: kikihayashi0425
       WAIT_HOSTS: mysql-server:3306
     command: sh -c "/wait && java -jar /app/app.jar"
-  web-db:
-    image: mysql:8.0
+  db:
     container_name: mysql-server
+    build:
+      context: .
+      target: db
+    image: kikihayashi/productwarehousing-mysql:1.5
     ports:
       - 3307:3306
     environment:
       MYSQL_DATABASE: productwarehousing
       MYSQL_ROOT_PASSWORD: kikihayashi0425
-    #使用volumes配置將MySQL數據庫中的數據持久化到主機上
-    #建立app/resources資料夾並將sqlCommand裡的所有資料放在mysql-server容器中的docker-entrypoint-initdb.d資料夾內
-    volumes:
-      - ./src/main/resources/sqlCommand:/docker-entrypoint-initdb.d
-#      - D:/Program/Docker Volumn/mysql:/var/lib/mysql

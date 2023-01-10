@@ -1,5 +1,11 @@
+FROM mysql:8.0 AS db
+
+ARG SQL_FILE=target/*.sql
+
+COPY ${SQL_FILE} /docker-entrypoint-initdb.d/
+
 #建構Docker Images
-FROM openjdk:11
+FROM openjdk:11 AS web
 
 # 設定環境變量
 #註：在 Dockerfile 中設定環境變量，代表這些環境變量將在建立 Docker 鏡像時就已經設定好了。
@@ -26,3 +32,13 @@ RUN chmod +x /wait
 ARG JAR_FILE=target/*.jar
 #將指定的JAR檔複製到容器的app資料夾中，並將其命名為app.jar。
 COPY ${JAR_FILE} /app/app.jar
+
+
+
+
+
+
+
+
+
+
