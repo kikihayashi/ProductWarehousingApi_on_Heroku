@@ -1,22 +1,28 @@
 version: '3.8'
 services:
   web:
+    #容器名稱
     container_name: spring-boot
-    #表示從當前目錄的Dockerfile文件中建立image
+    #context:'.'表示從當前目錄的Dockerfile文件中建立image
+    #target:對應Dockerfile文件中FROM...AS target
     build:
       context: .
       target: web
+    #有build設定，則為映像檔名稱
+    #無build設定，嘗試從dockerhub取得該映象檔，若無，則為映像檔名稱
     image: kikihayashi/productwarehousing-springboot:1.5
-    #左邊的端口是主機的端口，右邊的端口是容器的端口。可以通過主機的端口8023存取容器的端口8080
+    #左邊是主機的端口，右邊是容器的端口，可以通過主機的端口8023來存取容器的端口8080
     ports:
       - 8023:8080
     #表示在啟動這個Spring Boot應用程式之前，先讓MySQL服務啟動
     depends_on:
       - db
+    #環境變數設定
     environment:
       MYSQL_DATABASE: productwarehousing
       MYSQL_ROOT_PASSWORD: kikihayashi0425
       WAIT_HOSTS: mysql-server:3306
+    #執行指令
     command: sh -c "/wait && java -jar /app/app.jar"
   db:
     container_name: mysql-server

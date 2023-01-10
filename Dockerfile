@@ -1,6 +1,6 @@
 FROM mysql:8.0 AS db
 
-ARG SQL_FILE=target/*.sql
+ARG SQL_FILE=src/main/resources/sqlcommand/*.sql
 
 COPY ${SQL_FILE} /docker-entrypoint-initdb.d/
 
