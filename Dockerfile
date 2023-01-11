@@ -1,5 +1,11 @@
 FROM mysql:8.0 AS db
 
+# 設定環境變量
+# LANG的設定是讓terminal對mysql編碼為UTF-8，以防資料變成亂碼
+ENV LANG=C.UTF-8
+ENV MYSQL_DATABASE=productwarehousing
+ENV MYSQL_ROOT_PASSWORD=kikihayashi0425
+
 ARG SQL_FILE=src/main/resources/sqlcommand/*.sql
 
 COPY ${SQL_FILE} /docker-entrypoint-initdb.d/

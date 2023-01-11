@@ -1,17 +1,17 @@
 version: '3.8'
 services:
   web:
-    restart: on-failure:3
+    restart: on-failure
     #容器名稱
     container_name: spring-boot
     #context:'.'表示從當前目錄的Dockerfile文件中建立image
     #target:對應Dockerfile文件中FROM...AS target
     build:
-      context: .
-      target: web
+       context: .
+       target: web
     #有build設定，則為映像檔名稱
     #無build設定，嘗試從dockerhub取得該映象檔，若無，則為映像檔名稱
-    image: kikihayashi/productwarehousing-springboot:1.5
+    image: kikihayashi/productwarehousing-springboot:2.0
     #左邊是主機的端口，右邊是容器的端口，可以通過主機的端口8023來存取容器的端口8080
     ports:
       - 8023:8080
@@ -20,19 +20,14 @@ services:
       - db
     #環境變數設定
     environment:
-      MYSQL_DATABASE: productwarehousing
-      MYSQL_ROOT_PASSWORD: kikihayashi0425
       WAIT_HOSTS: mysql-server:3306
     #執行指令
     command: sh -c "/wait && java -jar /app/app.jar"
   db:
     container_name: mysql-server
     build:
-      context: .
-      target: db
-    image: kikihayashi/productwarehousing-mysql:1.5
+       context: .
+       target: db
+    image: kikihayashi/productwarehousing-mysql:2.0
     ports:
       - 3307:3306
-    environment:
-      MYSQL_DATABASE: productwarehousing
-      MYSQL_ROOT_PASSWORD: kikihayashi0425
