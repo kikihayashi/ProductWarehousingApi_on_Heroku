@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   web:
+    restart: on-failure:3
     #容器名稱
     container_name: spring-boot
     #context:'.'表示從當前目錄的Dockerfile文件中建立image
